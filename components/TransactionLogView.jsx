@@ -358,10 +358,17 @@ export default function TransactionLogView({
                     {/* Pre-Committed Share Locked & Zero-Loss Protection Card */}
                     <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5 text-left sm:text-right shrink-0 min-w-[200px]">
                       <div className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Financial Protection</div>
-                      <div className="flex items-center sm:justify-end gap-1.5 font-bold text-emerald-700 text-xs">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span>Remaining members: ₹0 loss</span>
-                      </div>
+                      {perPersonDelta > 0 && !log.snapshotAfter?.lockedShareAmount ? (
+                        <div className="flex items-center sm:justify-end gap-1.5 font-bold text-amber-700 text-xs">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>Absorbed Split: +₹{perPersonDelta.toLocaleString()}/person</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center sm:justify-end gap-1.5 font-bold text-emerald-700 text-xs">
+                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <span>Remaining members: ₹0 loss</span>
+                        </div>
+                      )}
                       {log.snapshotAfter?.lockedShareAmount ? (
                         <div className="text-[11px] text-slate-600">
                           Locked Debt Due: <strong className="font-mono text-rose-700 font-bold">₹{Number(log.snapshotAfter.lockedShareAmount).toLocaleString()}</strong>
@@ -400,6 +407,10 @@ export default function TransactionLogView({
                               {isLocked ? (
                                 <span className="text-[9px] uppercase font-black px-1 py-0.2 rounded bg-rose-200 text-rose-800">
                                   Locked Due
+                                </span>
+                              ) : perPersonDelta > 0 && !log.snapshotAfter?.lockedShareAmount ? (
+                                <span className="text-[9px] uppercase font-bold px-1 py-0.2 rounded bg-amber-100 text-amber-800">
+                                  Adjusted
                                 </span>
                               ) : (
                                 <span className="text-[9px] uppercase font-bold px-1 py-0.2 rounded bg-emerald-100 text-emerald-800">

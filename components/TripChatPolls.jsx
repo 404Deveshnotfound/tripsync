@@ -10,7 +10,8 @@ import {
   Sparkles, 
   Clock, 
   Receipt,
-  User
+  User,
+  ShieldCheck
 } from 'lucide-react';
 
 export default function TripChatPolls({
@@ -18,11 +19,15 @@ export default function TripChatPolls({
   messages = [],
   members = [],
   currentUserId,
+  isManager = false,
+  isDemocratic = false,
   onMessageSent,
-  onVoteCast
+  onVoteCast,
+  onExpenseVerified
 }) {
   const [newText, setNewText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [approvingExpenseId, setApprovingExpenseId] = useState(null);
 
   const currentMember = members.find(m => m.user_id === currentUserId);
   const currentMemberId = currentMember?.id;
@@ -77,6 +82,32 @@ export default function TripChatPolls({
     }
   };
 
+  const handleManagerDirectApprove = async (expenseId) => {
+    if (!expenseId || !currentMemberId) return;
+    setApprovingExpenseId(expenseId);
+
+    try {
+      const res = await fetch(`/api/trips/${tripId}/expenses/${expenseId}/verify`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'approve',
+          verifiedByMemberId: currentMemberId
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        if (onExpenseVerified) onExpenseVerified();
+        if (onVoteCast) onVoteCast();
+      }
+    } catch (err) {
+      console.error('Manager approve error:', err);
+    } finally {
+      setApprovingExpenseId(null);
+    }
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[600px] animate-fadeIn">
       
@@ -87,8 +118,8 @@ export default function TripChatPolls({
             <MessageSquare className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Trip Group Chat & Polls</h3>
-            <p className="text-[11px] text-slate-500">Live communication & democratic expense verification</p>
+            <h3 className="text-sm font-bold text-slate-900">Group Chat</h3>
+            <p className="text-[11px] text-slate-500">Live communication &amp; in-chat expense voting polls</p>
           </div>
         </div>
       </div>
@@ -167,30 +198,44 @@ export default function TripChatPolls({
 
                   {/* Voting Actions */}
                   {!isApproved && (
-                    <div className="pt-2 flex items-center gap-2">
-                      <button
-                        onClick={() => handleVote(poll.id, 'approve')}
-                        className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                          myVote === 'approve'
-                            ? 'bg-emerald-600 text-white shadow-sm'
-                            : 'bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        }`}
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        {myVote === 'approve' ? 'You Approved' : 'Approve'}
-                      </button>
+                    <div className="pt-2 flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleVote(poll.id, 'approve')}
+                          className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                            myVote === 'approve'
+                              ? 'bg-emerald-600 text-white shadow-sm'
+                              : 'bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          }`}
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {myVote === 'approve' ? 'You Approved' : 'Approve'}
+                        </button>
 
-                      <button
-                        onClick={() => handleVote(poll.id, 'reject')}
-                        className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                          myVote === 'reject'
-                            ? 'bg-rose-600 text-white shadow-sm'
-                            : 'bg-white hover:bg-rose-50 text-rose-700 border border-rose-200'
-                        }`}
-                      >
-                        <XCircle className="w-3.5 h-3.5" />
-                        {myVote === 'reject' ? 'You Rejected' : 'Reject'}
-                      </button>
+                        <button
+                          onClick={() => handleVote(poll.id, 'reject')}
+                          className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                            myVote === 'reject'
+                              ? 'bg-rose-600 text-white shadow-sm'
+                              : 'bg-white hover:bg-rose-50 text-rose-700 border border-rose-200'
+                          }`}
+                        >
+                          <XCircle className="w-3.5 h-3.5" />
+                          {myVote === 'reject' ? 'You Rejected' : 'Reject'}
+                        </button>
+                      </div>
+
+                      {/* Manager Direct Approval Option */}
+                      {isManager && poll.expense_id && (
+                        <button
+                          onClick={() => handleManagerDirectApprove(poll.expense_id)}
+                          disabled={approvingExpenseId === poll.expense_id}
+                          className="w-full py-1.5 px-3 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <span>{approvingExpenseId === poll.expense_id ? 'Approving...' : 'Manager Direct Approve'}</span>
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -226,19 +271,19 @@ export default function TripChatPolls({
         })}
       </div>
 
-      {/* Message Input Box */}
-      <form onSubmit={handleSendMessage} className="p-4 border-t border-slate-100 bg-white flex items-center gap-2 shrink-0">
+      {/* Input Form */}
+      <form onSubmit={handleSendMessage} className="p-4 border-t border-slate-100 bg-slate-50 flex items-center gap-2 shrink-0">
         <input
           type="text"
+          placeholder="Type a group message..."
           value={newText}
           onChange={(e) => setNewText(e.target.value)}
-          placeholder="Type a message or expense question..."
-          className="flex-1 px-4 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <button
           type="submit"
           disabled={loading || !newText.trim()}
-          className="p-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm transition disabled:opacity-50"
+          className="p-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl shadow-md shadow-indigo-200 transition disabled:opacity-50"
         >
           <Send className="w-4 h-4" />
         </button>

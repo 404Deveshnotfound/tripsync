@@ -29,16 +29,17 @@ export async function POST(request, { params }) {
     if (isUsingPlaceholder()) {
       let resultAuditLogs = [];
 
-      if (action === 'member_leave') {
+      if (action === 'member_leave' || action === 'member_removed') {
+        const isRemoved = action === 'member_removed';
         const member = mockMembers.find(m => m.id === memberId && m.trip_id === tripId);
         if (!member) {
           return NextResponse.json({ success: false, error: 'Member not found in trip' }, { status: 404 });
         }
 
-        // Mark member as left
-        member.status = 'left';
+        // Mark member as left or removed
+        member.status = isRemoved ? 'removed' : 'left';
         member.left_at = new Date().toISOString();
-        member.reason_for_leaving = reason;
+        member.reason_for_leaving = reason || (isRemoved ? 'Removed by Manager' : 'Left trip');
 
         const currentBookings = mockBookings.filter(b => b.trip_id === tripId);
         const currentExpenses = mockExpenses.filter(e => e.trip_id === tripId);
@@ -50,7 +51,11 @@ export async function POST(request, { params }) {
           leavingMemberName: member.display_name,
           bookings: currentBookings,
           expenses: currentExpenses,
-          performedByMemberId
+          performedByMemberId,
+          triggerEvent: isRemoved ? 'member_removed' : 'participant_left',
+          customDescription: isRemoved 
+            ? `${member.display_name} was removed from the trip` 
+            : `${member.display_name} left the trip`
         });
 
         // Update mock store
@@ -103,7 +108,8 @@ export async function POST(request, { params }) {
     // Live Supabase Execution
     const supabase = createAdminClient();
 
-    if (action === 'member_leave') {
+    if (action === 'member_leave' || action === 'member_removed') {
+      const isRemoved = action === 'member_removed';
       // 1. Fetch member details
       const { data: member } = await supabase
         .from('trip_members')
@@ -129,13 +135,21 @@ export async function POST(request, { params }) {
         leavingMemberName: member?.display_name || 'Traveler',
         bookings: bookings || [],
         expenses: expenses || [],
-        performedByMemberId
+        performedByMemberId,
+        triggerEvent: isRemoved ? 'member_removed' : 'participant_left',
+        customDescription: isRemoved 
+          ? `${member?.display_name || 'A participant'} was removed from the trip` 
+          : `${member?.display_name || 'A participant'} left the trip`
       });
 
-      // 4. Update member status to left
+      // 4. Update member status to left or removed
       await supabase
         .from('trip_members')
-        .update({ status: 'left', left_at: new Date().toISOString(), reason_for_leaving: reason })
+        .update({
+          status: isRemoved ? 'removed' : 'left',
+          left_at: new Date().toISOString(),
+          reason_for_leaving: reason || (isRemoved ? 'Removed by Manager' : 'Left trip')
+        })
         .eq('id', memberId);
 
       // 5. Persist updated bookings

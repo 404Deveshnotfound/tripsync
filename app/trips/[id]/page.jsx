@@ -4,18 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { useOfflineSync } from '@/hooks/useOfflineSync';
-import MasterItineraryView from '@/components/MasterItineraryView';
 import ExpensesView from '@/components/ExpensesView';
-import WhatChangedDiffView from '@/components/WhatChangedDiffView';
+import TransactionLogView from '@/components/TransactionLogView';
 import TripChatPolls from '@/components/TripChatPolls';
-import VerificationQueueView from '@/components/VerificationQueueView';
+import RefundsView from '@/components/RefundsView';
 import SettlementView from '@/components/SettlementView';
 import FinancialHealthDashboard from '@/components/FinancialHealthDashboard';
 import PersonalDashboardView from '@/components/PersonalDashboardView';
-import WhatIfSimulatorView from '@/components/WhatIfSimulatorView';
-import OfflineSyncBanner from '@/components/OfflineSyncBanner';
-import AddBookingModal from '@/components/AddBookingModal';
 import AddExpenseModal from '@/components/AddExpenseModal';
 import AiExpenseParserModal from '@/components/AiExpenseParserModal';
 import AiFinanceAssistantModal from '@/components/AiFinanceAssistantModal';
@@ -32,6 +27,7 @@ import {
   Share2,
   DollarSign,
   History,
+  RotateCcw,
   QrCode,
   Shield,
   Sparkles,
@@ -39,9 +35,11 @@ import {
   Vote,
   AlertCircle,
   PieChart as PieIcon,
-  Sliders,
   UserCheck,
-  Bot
+  Bot,
+  LogOut,
+  UserMinus,
+  X
 } from 'lucide-react';
 
 export default function TripOverviewPage() {
@@ -65,24 +63,24 @@ export default function TripOverviewPage() {
   const [copiedLink, setCopiedLink] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
 
-  const [isAddBookingOpen, setIsAddBookingOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isAiExpenseOpen, setIsAiExpenseOpen] = useState(false);
   const [isOcrExpenseOpen, setIsOcrExpenseOpen] = useState(false);
   const [isAiAssistantOpen, setIsAiAssistantOpen] = useState(false);
   const [aiInitialExpenseData, setAiInitialExpenseData] = useState(null);
 
-  // Hook for Offline-First Sync
-  const {
-    isOnline,
-    pendingOfflineCount,
-    isSyncing,
-    lastSyncToast,
-    syncQueue,
-    recordOffline
-  } = useOfflineSync(id, () => {
-    loadTripData();
-  });
+  // Member leave & remove states
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const [leaveReason, setLeaveReason] = useState('');
+  const [isLeaveLoading, setIsLeaveLoading] = useState(false);
+
+  const [memberToRemove, setMemberToRemove] = useState(null);
+  const [removeReason, setRemoveReason] = useState('');
+  const [isRemoveLoading, setIsRemoveLoading] = useState(false);
+
+  const myMember = members.find(m => m.user_id === user?.id);
+
+
 
   // Fetch full trip data, bookings, expenses, chat, audit logs, and settlements
   const loadTripData = async () => {
@@ -131,7 +129,7 @@ export default function TripOverviewPage() {
       }
 
       // 6. Fetch Greedy Settlements & Explainability Breakdowns
-      const resSettle = await fetch(`/api/trips/${id}/settlements`);
+      const resSettle = await fetch(`/api/trips/${id}/settlements?t=${Date.now()}`, { cache: 'no-store' });
       const dataSettle = await resSettle.json();
       if (dataSettle.success) {
         setSettlementTransfers(dataSettle.transfers || []);
@@ -161,15 +159,9 @@ export default function TripOverviewPage() {
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const handleBookingAdded = () => {
-    loadTripData();
-  };
 
-  const handleExpenseAdded = async (newExpenseData) => {
-    if (!navigator.onLine) {
-      await recordOffline(newExpenseData);
-      return;
-    }
+
+  const handleExpenseAdded = () => {
     loadTripData();
   };
 
@@ -190,7 +182,67 @@ export default function TripOverviewPage() {
 
   const handleRecalculationTriggered = () => {
     loadTripData();
-    setActiveTab('diff');
+    setActiveTab('logs');
+  };
+
+  const handleConfirmLeave = async () => {
+    if (!myMember) return;
+    setIsLeaveLoading(true);
+    try {
+      const res = await fetch(`/api/trips/${id}/recalculate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'member_leave',
+          memberId: myMember.id,
+          reason: leaveReason || 'Left trip early',
+          performedByMemberId: myMember.id
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setIsLeaveModalOpen(false);
+        setLeaveReason('');
+        await loadTripData();
+      } else {
+        alert(data.error || 'Failed to leave trip');
+      }
+    } catch (err) {
+      console.error('Leave trip error:', err);
+      alert('Error leaving trip: ' + err.message);
+    } finally {
+      setIsLeaveLoading(false);
+    }
+  };
+
+  const handleConfirmRemove = async () => {
+    if (!memberToRemove) return;
+    setIsRemoveLoading(true);
+    try {
+      const res = await fetch(`/api/trips/${id}/recalculate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'member_removed',
+          memberId: memberToRemove.id,
+          reason: removeReason || 'Removed by Manager',
+          performedByMemberId: myMember?.id
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMemberToRemove(null);
+        setRemoveReason('');
+        await loadTripData();
+      } else {
+        alert(data.error || 'Failed to remove member');
+      }
+    } catch (err) {
+      console.error('Remove member error:', err);
+      alert('Error removing member: ' + err.message);
+    } finally {
+      setIsRemoveLoading(false);
+    }
   };
 
   if (loading) {
@@ -217,18 +269,12 @@ export default function TripOverviewPage() {
   const isManagerTrip = trip.governance_mode === 'manager_based';
   const canAddBooking = isDemocratic || isManager;
   const pendingVerificationCount = expenses.filter(e => e.verification_status === 'pending_verification').length;
+  const refundsCount = expenses.filter(e => e.category === 'refund' || e.type === 'refund' || Number(e.total_amount) < 0).length;
 
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
       
-      {/* Offline Status & Auto-Sync Banner */}
-      <OfflineSyncBanner
-        isOnline={isOnline}
-        pendingOfflineCount={pendingOfflineCount}
-        isSyncing={isSyncing}
-        lastSyncToast={lastSyncToast}
-        onSyncNow={syncQueue}
-      />
+
 
       {/* Top Breadcrumb & Share Actions */}
       <div className="flex items-center justify-between">
@@ -316,6 +362,28 @@ export default function TripOverviewPage() {
               </p>
             )}
 
+            {/* Self-Leave Trip Action (Below Description) */}
+            {myMember && myMember.status === 'active' && !isOwner && (
+              <div className="pt-2">
+                <button
+                  onClick={() => setIsLeaveModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-xl border border-rose-200 transition shadow-sm"
+                  title="Leave this trip early and trigger automatic cost recalculation"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  Leave Trip
+                </button>
+              </div>
+            )}
+            {myMember && (myMember.status === 'left' || myMember.status === 'removed') && (
+              <div className="pt-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-xl border border-slate-200">
+                  <LogOut className="w-3.5 h-3.5 text-slate-400" />
+                  {myMember.status === 'left' ? 'You have left this trip' : 'You were removed from this trip'}
+                </span>
+              </div>
+            )}
+
           </div>
 
           {/* Quick Ledger Snapshot Box */}
@@ -342,14 +410,12 @@ export default function TripOverviewPage() {
           {[
             { id: 'overview', label: 'Overview & Members', icon: Users },
             { id: 'personal', label: 'My Dashboard', icon: UserCheck },
-            { id: 'itinerary', label: `Master Itinerary (${bookings.length})`, icon: Calendar },
-            { id: 'expenses', label: `Expenses & Splits (${expenses.length})`, icon: DollarSign },
-            { id: 'diff', label: `What Changed? (${auditLogs.length})`, icon: History, highlight: true },
-            { id: 'chat', label: `Chat & Polls (${chatMessages.length})`, icon: MessageSquare },
-            { id: 'verify', label: `Verification (${pendingVerificationCount})`, icon: ShieldCheck, alert: pendingVerificationCount > 0 },
+            { id: 'expenses', label: `Expenses & Splits (${expenses.length + bookings.length})`, icon: DollarSign },
+            { id: 'logs', label: `Transaction Log (${auditLogs.length + expenses.length + bookings.length})`, icon: History },
+            { id: 'refunds', label: `Refunds (${refundsCount})`, icon: RotateCcw },
+            { id: 'chat', label: `Group Chat (${chatMessages.length})`, icon: MessageSquare },
             { id: 'settle', label: `Settlement & UPI (${settlementTransfers.length})`, icon: QrCode },
-            { id: 'health', label: 'Financial Health', icon: PieIcon },
-            { id: 'simulate', label: 'What-If Sandbox', icon: Sliders }
+            { id: 'health', label: 'Financial Health', icon: PieIcon }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -446,10 +512,26 @@ export default function TripOverviewPage() {
                       <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                         member.status === 'active' 
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                          : member.status === 'removed'
+                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
                           : 'bg-rose-50 text-rose-700 border border-rose-200'
                       }`}>
-                        {member.status === 'active' ? '● Active' : '○ Left Trip'}
+                        {member.status === 'active' ? '● Active' : member.status === 'removed' ? '○ Removed' : '○ Left Trip'}
                       </span>
+
+                      {/* Manager Remove Participant Action */}
+                      {isManagerTrip && (isOwner || isManager) && member.status === 'active' && member.role !== 'owner' && member.user_id !== user?.id && (
+                        <button
+                          onClick={() => {
+                            setMemberToRemove(member);
+                            setRemoveReason('');
+                          }}
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                          title={`Remove ${member.display_name} from trip (triggers cost recalculation)`}
+                        >
+                          <UserMinus className="w-4 h-4 text-rose-500" />
+                        </button>
+                      )}
                     </div>
 
                   </div>
@@ -474,21 +556,11 @@ export default function TripOverviewPage() {
         />
       )}
 
-      {/* Tab 3: Master & Personal Itinerary */}
-      {activeTab === 'itinerary' && (
-        <MasterItineraryView
-          bookings={bookings}
-          members={members}
-          currentUserId={user?.id}
-          canAddBooking={canAddBooking}
-          onOpenAddModal={() => setIsAddBookingOpen(true)}
-        />
-      )}
-
-      {/* Tab 4: Expenses & Splits */}
+      {/* Tab 3: Expenses & Splits (Consolidated Master Log & My Personal) */}
       {activeTab === 'expenses' && (
         <ExpensesView
           expenses={expenses}
+          bookings={bookings}
           members={members}
           ledger={ledger}
           currentUserId={user?.id}
@@ -501,14 +573,28 @@ export default function TripOverviewPage() {
         />
       )}
 
-      {/* Tab 5: "What Changed?" Dynamic Recalculation Diff Engine */}
-      {activeTab === 'diff' && (
-        <WhatChangedDiffView
+      {/* Tab 4: Transaction & Recalculation Log */}
+      {activeTab === 'logs' && (
+        <TransactionLogView
+          expenses={expenses}
+          bookings={bookings}
           auditLogs={auditLogs}
           members={members}
-          tripId={id}
           currentUserId={user?.id}
-          onTriggerRecalculate={handleRecalculationTriggered}
+        />
+      )}
+
+      {/* Tab 5: Refunds Log & Dedicated Split Reversal Manager */}
+      {activeTab === 'refunds' && (
+        <RefundsView
+          tripId={id}
+          expenses={expenses}
+          bookings={bookings}
+          auditLogs={auditLogs}
+          members={members}
+          ledger={ledger}
+          currentUserId={user?.id}
+          onRefundAdded={loadTripData}
         />
       )}
 
@@ -519,21 +605,11 @@ export default function TripOverviewPage() {
           messages={chatMessages}
           members={members}
           currentUserId={user?.id}
-          onMessageSent={loadTripData}
-          onVoteCast={loadTripData}
-        />
-      )}
-
-      {/* Tab 7: Multi-Tier Verification Queue */}
-      {activeTab === 'verify' && (
-        <VerificationQueueView
-          tripId={id}
-          expenses={expenses}
-          members={members}
           isManager={isManager}
           isDemocratic={isDemocratic}
-          currentUserId={user?.id}
-          onVerificationUpdated={loadTripData}
+          onMessageSent={loadTripData}
+          onVoteCast={loadTripData}
+          onExpenseVerified={loadTripData}
         />
       )}
 
@@ -544,6 +620,7 @@ export default function TripOverviewPage() {
           ledger={ledger}
           members={members}
           tripTitle={trip.title}
+          tripId={id}
           currentUserId={user?.id}
           onSettlementUpdated={loadTripData}
         />
@@ -559,15 +636,7 @@ export default function TripOverviewPage() {
         />
       )}
 
-      {/* Tab 10: "What-If?" Simulation Sandbox */}
-      {activeTab === 'simulate' && (
-        <WhatIfSimulatorView
-          bookings={bookings}
-          expenses={expenses}
-          members={members}
-          ledger={ledger}
-        />
-      )}
+
 
       {/* Floating AI Finance Copilot Trigger */}
       <button
@@ -580,14 +649,7 @@ export default function TripOverviewPage() {
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
       </button>
 
-      {/* Modals */}
-      <AddBookingModal
-        isOpen={isAddBookingOpen}
-        onClose={() => setIsAddBookingOpen(false)}
-        tripId={id}
-        members={members}
-        onBookingAdded={handleBookingAdded}
-      />
+
 
       <AddExpenseModal
         isOpen={isAddExpenseOpen}
@@ -633,6 +695,182 @@ export default function TripOverviewPage() {
         members={members}
         auditLogs={auditLogs}
       />
+
+      {/* Leave Trip Confirmation Modal */}
+      {isLeaveModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2 text-rose-600 font-bold text-base">
+                <LogOut className="w-5 h-5" />
+                <span>Leave Trip</span>
+              </div>
+              <button
+                onClick={() => setIsLeaveModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            {(() => {
+              const mySummary = ledger?.memberSummaries?.find(s => s.memberId === myMember?.id);
+              const myCommittedShare = Number(mySummary?.totalShare || 0);
+              const myNetBalance = Number(mySummary?.netBalance || 0);
+
+              return (
+                <div className="space-y-3 text-xs text-slate-600 leading-relaxed">
+                  <p>
+                    Are you sure you want to leave <strong>{trip?.title}</strong>?
+                  </p>
+                  <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-950 space-y-2">
+                    <span className="font-bold flex items-center gap-1.5 text-amber-800 text-xs">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      Pre-Decided Share Obligation &amp; No-Loss Policy
+                    </span>
+                    <p className="text-[11px] text-amber-900 leading-relaxed">
+                      All predecided amounts for itineraries and shared expenses already booked or paid remain your financial liability. Remaining travelers will <strong>not</strong> incur an unfair loss or absorb your share.
+                    </p>
+                    <div className="pt-2 border-t border-amber-200/80 flex items-center justify-between text-xs font-semibold">
+                      <span className="text-amber-800">Your Locked Pre-Committed Share:</span>
+                      <span className="font-mono text-rose-700 font-bold text-sm">₹{myCommittedShare.toLocaleString()}</span>
+                    </div>
+                    {myNetBalance < 0 && (
+                      <div className="text-[11px] text-rose-800 font-medium bg-rose-50 p-2.5 rounded-lg border border-rose-200 flex items-start gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-rose-600 mt-0.5 shrink-0" />
+                        <span>
+                          You currently have an outstanding balance of <strong>₹{Math.abs(myNetBalance).toLocaleString()}</strong>. This amount remains an active debt payable by you to the payer(s) via UPI.
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Reason for Leaving (Optional)
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Flight booked early / Emergency"
+                value={leaveReason}
+                onChange={(e) => setLeaveReason(e.target.value)}
+                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setIsLeaveModalOpen(false)}
+                disabled={isLeaveLoading}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmLeave}
+                disabled={isLeaveLoading}
+                className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-md shadow-rose-600/20 transition disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {isLeaveLoading ? 'Recalculating...' : 'Confirm & Leave'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Remove Participant Modal (Manager / Owner) */}
+      {memberToRemove && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2 text-rose-600 font-bold text-base">
+                <UserMinus className="w-5 h-5" />
+                <span>Remove Participant</span>
+              </div>
+              <button
+                onClick={() => setMemberToRemove(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            {(() => {
+              const removeSummary = ledger?.memberSummaries?.find(s => s.memberId === memberToRemove?.id);
+              const removeCommittedShare = Number(removeSummary?.totalShare || 0);
+              const removeNetBalance = Number(removeSummary?.netBalance || 0);
+
+              return (
+                <div className="space-y-3 text-xs text-slate-600 leading-relaxed">
+                  <p>
+                    Are you sure you want to remove <strong>{memberToRemove.display_name}</strong> from this trip?
+                  </p>
+                  <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-950 space-y-2">
+                    <span className="font-bold flex items-center gap-1.5 text-amber-800 text-xs">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      Pre-Committed Share Locked (Remaining Travelers Protected)
+                    </span>
+                    <p className="text-[11px] text-amber-900 leading-relaxed">
+                      In accordance with the fair split policy, removing this participant will <strong>not</strong> impose extra costs or losses on the remaining travelers. Their predecided share for already booked itineraries remains locked as their payable liability.
+                    </p>
+                    <div className="pt-2 border-t border-amber-200/80 flex items-center justify-between text-xs font-semibold">
+                      <span className="text-amber-800">Their Locked Share Obligation:</span>
+                      <span className="font-mono text-rose-700 font-bold text-sm">₹{removeCommittedShare.toLocaleString()}</span>
+                    </div>
+                    {removeNetBalance < 0 && (
+                      <div className="text-[11px] text-amber-900 font-medium bg-amber-100/60 p-2.5 rounded-lg border border-amber-300 flex items-start gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-700 mt-0.5 shrink-0" />
+                        <span>
+                          Outstanding debt due: <strong>₹{Math.abs(removeNetBalance).toLocaleString()}</strong> remains recorded in the settlement ledger and payable by {memberToRemove.display_name}.
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Reason for Removal (Optional)
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Cancelled attendance / Disputed terms"
+                value={removeReason}
+                onChange={(e) => setRemoveReason(e.target.value)}
+                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setMemberToRemove(null)}
+                disabled={isRemoveLoading}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmRemove}
+                disabled={isRemoveLoading}
+                className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-md shadow-rose-600/20 transition disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {isRemoveLoading ? 'Recalculating...' : 'Remove & Recalculate'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

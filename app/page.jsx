@@ -130,7 +130,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center gap-2 text-indigo-200">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>Offline-First Sync</span>
+            <span>AI & OCR Expense Scanner</span>
           </div>
         </div>
       </div>

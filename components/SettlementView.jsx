@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import confetti from 'canvas-confetti';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
-import { generateUpiIntentUri } from '@/lib/services/settlementSolver';
+import { generateUpiIntentUri, solveMinimalSettlements, buildExplainabilityTree } from '@/lib/services/settlementSolver';
+import VerifySettlementModal from '@/components/VerifySettlementModal';
 import { 
   QrCode, 
   ArrowRight, 
@@ -19,7 +20,10 @@ import {
   HelpCircle,
   ThumbsUp,
   X,
-  CreditCard
+  CreditCard,
+  Camera,
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
 
 export default function SettlementView({
@@ -27,17 +31,45 @@ export default function SettlementView({
   ledger,
   members = [],
   tripTitle = 'TripSync',
+  tripId = '',
   currentUserId,
   onSettlementUpdated
 }) {
   const { isMobile } = useDeviceDetect();
   const [expandedTransferId, setExpandedTransferId] = useState(null);
   const [activeQrModalTransfer, setActiveQrModalTransfer] = useState(null);
+  const [activeVerifyTransfer, setActiveVerifyTransfer] = useState(null);
   const [utrInput, setUtrInput] = useState({});
   const [submittingId, setSubmittingId] = useState(null);
 
   const currentMember = members.find(m => m.user_id === currentUserId);
   const currentMemberId = currentMember?.id;
+
+  // Dynamically compute minimal settlements directly from live ledger so leaving members' locked shares are immediately reflected
+  const activeTransfers = useMemo(() => {
+    if (ledger?.memberSummaries && ledger.memberSummaries.length > 0) {
+      const rawSolved = solveMinimalSettlements(ledger.memberSummaries);
+      return rawSolved.map(raw => {
+        // Find matching persisted record
+        const match = transfers.find(
+          t => (t.payerMemberId === raw.payerMemberId && t.receiverMemberId === raw.receiverMemberId) ||
+               (t.id === raw.id)
+        );
+        const debtorSummary = ledger.memberSummaries.find(m => m.memberId === raw.payerMemberId);
+        const breakdown = buildExplainabilityTree(debtorSummary, raw.receiverMemberId);
+
+        return {
+          ...raw,
+          dbId: match?.dbId || match?.id || null,
+          status: match?.status || 'pending', // 'pending' | 'verifying' | 'completed'
+          utrNumber: match?.utrNumber || null,
+          proofData: match?.proofData || null,
+          breakdown: match?.breakdown && match.breakdown.length > 0 ? match.breakdown : breakdown
+        };
+      });
+    }
+    return transfers;
+  }, [ledger, transfers]);
 
   // Toggle explainability breakdown accordion
   const toggleExpand = (id) => {
@@ -71,11 +103,11 @@ export default function SettlementView({
     setSubmittingId(transfer.id);
 
     try {
-      const res = await fetch(`/api/trips/${transfer.tripId || 'current'}/settlements/pay`, {
+      const res = await fetch(`/api/trips/${tripId || 'current'}/settlements/pay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          settlementId: transfer.id,
+          settlementId: transfer.dbId || transfer.id,
           payerMemberId: transfer.payerMemberId,
           receiverMemberId: transfer.receiverMemberId,
           amount: transfer.amount,
@@ -101,16 +133,21 @@ export default function SettlementView({
     setSubmittingId(transfer.id);
 
     try {
-      const res = await fetch(`/api/trips/${transfer.tripId || 'current'}/settlements/${transfer.id}/confirm`, {
-        method: 'PATCH'
+      const res = await fetch(`/api/trips/${tripId || 'current'}/settlements/${transfer.dbId || transfer.id}/confirm`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          payerMemberId: transfer.payerMemberId,
+          receiverMemberId: transfer.receiverMemberId,
+          amount: transfer.amount
+        })
       });
 
       const data = await res.json();
       if (data.success) {
-        // Trigger celebration confetti
         confetti({
-          particleCount: 100,
-          spread: 70,
+          particleCount: 110,
+          spread: 75,
           origin: { y: 0.6 }
         });
 
@@ -130,10 +167,10 @@ export default function SettlementView({
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-800 space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
           <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-          Greedy Debt Simplification & Explainable Settlement
+          Greedy Debt Simplification &amp; Explainable Settlement
         </div>
         <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-          Smart Group Settlement & Device-Adaptive UPI
+          Smart Group Settlement &amp; Device-Adaptive UPI
         </h2>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
           We minimize redundant peer-to-peer transfers using a greedy cash-flow solver. Every rupee is tied to an itemized explainability breakdown answering <em>&quot;Why do I owe this?&quot;</em>
@@ -144,7 +181,7 @@ export default function SettlementView({
           {isMobile ? (
             <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
               <Smartphone className="w-3.5 h-3.5 text-indigo-400" />
-              Mobile Detected: One-tap direct UPI App Chooser active (GPay, PhonePe, Paytm)
+              Mobile Detected: One-tap deep-link UPI Intent launch active
             </span>
           ) : (
             <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
@@ -159,6 +196,7 @@ export default function SettlementView({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {ledger?.memberSummaries?.map(m => {
           const isMe = m.memberId === currentMemberId;
+          const isDeparted = m.status === 'left' || m.status === 'removed';
           return (
             <div
               key={m.memberId}
@@ -169,6 +207,11 @@ export default function SettlementView({
               <div className="flex items-center justify-between text-xs mb-1">
                 <span className="font-bold text-slate-900 truncate">
                   {m.displayName} {isMe && '(You)'}
+                  {isDeparted && (
+                    <span className="ml-1.5 text-[9px] uppercase font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+                      Departed
+                    </span>
+                  )}
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                   m.isCreditor ? 'bg-emerald-50 text-emerald-700' :
@@ -205,11 +248,11 @@ export default function SettlementView({
             <h3 className="text-base font-bold text-slate-900">Simplified Group Transfers</h3>
           </div>
           <span className="text-xs text-slate-500 font-medium">
-            {transfers.length} transfer(s) required to settle entire trip
+            {activeTransfers.length} transfer(s) required to settle entire trip
           </span>
         </div>
 
-        {transfers.length === 0 ? (
+        {activeTransfers.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm space-y-2">
             <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
             <h4 className="text-sm font-bold text-slate-800">All Debts Fully Settled!</h4>
@@ -219,7 +262,7 @@ export default function SettlementView({
           </div>
         ) : (
           <div className="space-y-4">
-            {transfers.map((tr) => {
+            {activeTransfers.map((tr) => {
               const isPayerMe = tr.payerMemberId === currentMemberId;
               const isReceiverMe = tr.receiverMemberId === currentMemberId;
               const isExpanded = expandedTransferId === tr.id;
@@ -229,14 +272,20 @@ export default function SettlementView({
               return (
                 <div
                   key={tr.id}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200"
+                  className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition ${
+                    isCompleted 
+                      ? 'border-emerald-200 hover:border-emerald-300' 
+                      : isVerifying 
+                      ? 'border-amber-300 hover:border-amber-400' 
+                      : 'border-slate-200 hover:border-indigo-200'
+                  }`}
                 >
                   
                   {/* Transfer Main Row */}
                   <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     
                     {/* Parties involved */}
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
                         <span className={isPayerMe ? 'text-indigo-600 font-black' : ''}>
                           {tr.payerName} {isPayerMe && '(You)'}
@@ -247,15 +296,26 @@ export default function SettlementView({
                         </span>
                       </div>
                       
-                      <div className="text-xs text-slate-500 flex items-center gap-2">
+                      <div className="text-xs text-slate-500 flex flex-wrap items-center gap-2">
                         <span>Receiver UPI: <strong className="font-mono text-slate-700">{tr.receiverUpiId}</strong></span>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                          isCompleted ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                          isVerifying ? 'bg-indigo-50 text-indigo-700 border-indigo-200' :
-                          'bg-amber-50 text-amber-700 border-amber-200'
-                        }`}>
-                          {isCompleted ? 'Settled ✅' : isVerifying ? 'Verifying Handshake ⏳' : 'Payment Pending'}
-                        </span>
+                        
+                        {/* 3 Explicit Status Badges as requested by user */}
+                        {isCompleted ? (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-300 flex items-center gap-1">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Settlement Done</span>
+                          </span>
+                        ) : isVerifying ? (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-300 flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+                            <span>Settlement done by the person who has to pay but not confirmed by the receiver</span>
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-rose-50 text-rose-700 border-rose-300 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                            <span>Settlement Not Done</span>
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -268,27 +328,29 @@ export default function SettlementView({
                         </div>
                       </div>
 
-                      {/* Payment Actions */}
+                      {/* Payment & Verification Actions (Only visible to the person who has to pay) */}
                       {!isCompleted && isPayerMe && (
-                        <button
-                          onClick={() => handleInitiatePayment(tr)}
-                          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm shadow-indigo-200 transition flex items-center gap-1.5"
-                        >
-                          <QrCode className="w-4 h-4" />
-                          {isMobile ? 'Pay with UPI' : 'Show Dynamic QR'}
-                        </button>
-                      )}
+                        <div className="flex items-center gap-2">
+                          {/* Option 1: Mobile UPI Intent / Desktop QR */}
+                          <button
+                            onClick={() => handleInitiatePayment(tr)}
+                            className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5"
+                            title="Generate dynamic UPI QR / launch UPI Intent"
+                          >
+                            <QrCode className="w-3.5 h-3.5" />
+                            <span>{isMobile ? 'Pay with UPI' : 'Show QR'}</span>
+                          </button>
 
-                      {/* Receiver Handshake Confirmation */}
-                      {!isCompleted && isReceiverMe && (
-                        <button
-                          onClick={() => handleConfirmReceived(tr)}
-                          disabled={submittingId === tr.id}
-                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
-                        >
-                          <ThumbsUp className="w-4 h-4" />
-                          {submittingId === tr.id ? 'Confirming...' : 'Confirm Received'}
-                        </button>
+                          {/* Option 2: Verify Settlement Done with Screenshot OCR + AI */}
+                          <button
+                            onClick={() => setActiveVerifyTransfer(tr)}
+                            className="px-3.5 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5"
+                            title="Verify settlement done via payment screenshot OCR + AI"
+                          >
+                            <Camera className="w-3.5 h-3.5 text-amber-200" />
+                            <span>Verify Settlement</span>
+                          </button>
+                        </div>
                       )}
 
                       {/* Explainability Accordion Button */}
@@ -305,6 +367,38 @@ export default function SettlementView({
                     </div>
 
                   </div>
+
+                  {/* Receiver Handshake Prompt - ONLY DISPLAYED WHEN SENDER HAS VERIFIED IT (Orange state) */}
+                  {isVerifying && (
+                    <div className="mx-5 mb-4 p-3.5 bg-amber-50/80 border border-amber-300 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+                      <div className="space-y-0.5 text-xs text-amber-950">
+                        <div className="font-bold flex items-center gap-1.5 text-amber-900">
+                          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>Payment verified by sender via screenshot</span>
+                        </div>
+                        <div className="text-[11px] text-amber-800 flex items-center gap-2 font-mono">
+                          {tr.utrNumber && <span>UTR: <strong>{tr.utrNumber}</strong></span>}
+                          <span>&bull; Awaiting handshake confirmation from {tr.receiverName}</span>
+                        </div>
+                      </div>
+
+                      {/* The confirmation button is only available for the receiver */}
+                      {isReceiverMe ? (
+                        <button
+                          onClick={() => handleConfirmReceived(tr)}
+                          disabled={submittingId === tr.id}
+                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50"
+                        >
+                          <ThumbsUp className="w-4 h-4" />
+                          <span>{submittingId === tr.id ? 'Confirming...' : 'Confirm Payment Received'}</span>
+                        </button>
+                      ) : (
+                        <span className="text-[11px] text-slate-500 italic bg-white/70 px-2.5 py-1 rounded-lg border border-amber-200">
+                          Waiting for {tr.receiverName} to confirm receipt
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {/* Explainable Line-Item Breakdown Drawer */}
                   {isExpanded && (
@@ -413,6 +507,19 @@ export default function SettlementView({
 
           </div>
         </div>
+      )}
+
+      {/* Verify Settlement Modal (Screenshot OCR + AI) */}
+      {activeVerifyTransfer && (
+        <VerifySettlementModal
+          isOpen={Boolean(activeVerifyTransfer)}
+          onClose={() => setActiveVerifyTransfer(null)}
+          transfer={activeVerifyTransfer}
+          tripId={tripId}
+          onVerified={() => {
+            if (onSettlementUpdated) onSettlementUpdated();
+          }}
+        />
       )}
 
     </div>

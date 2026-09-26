@@ -47,7 +47,9 @@ export async function POST(request, { params }) {
       proofType = 'no_proof',
       proofUrl,
       extractedDetails,
-      date
+      date,
+      vendorName,
+      bookingReference
     } = body;
 
     if (!title || !totalAmount || !paidByMemberId || !participantMemberIds?.length) {
@@ -65,6 +67,12 @@ export async function POST(request, { params }) {
       rooms
     });
 
+    const finalExtractedDetails = {
+      ...(extractedDetails || {}),
+      ...(vendorName ? { vendorName } : {}),
+      ...(bookingReference ? { bookingReference } : {})
+    };
+
     // Mock store fallback
     if (isUsingPlaceholder()) {
       const newExpense = {
@@ -80,7 +88,9 @@ export async function POST(request, { params }) {
         verification_status: proofType === 'no_proof' ? 'pending_verification' : 'verified',
         proof_type: proofType,
         proof_url: proofUrl || null,
-        extracted_details: extractedDetails || null,
+        vendor_name: vendorName || null,
+        booking_reference: bookingReference || null,
+        extracted_details: finalExtractedDetails,
         created_at: new Date().toISOString()
       };
 
@@ -110,7 +120,7 @@ export async function POST(request, { params }) {
         verification_status: proofType === 'no_proof' ? 'pending_verification' : 'verified',
         proof_type: proofType,
         proof_url: proofUrl,
-        extracted_details: extractedDetails
+        extracted_details: finalExtractedDetails
       })
       .select()
       .single();

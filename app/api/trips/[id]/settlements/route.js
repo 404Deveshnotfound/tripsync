@@ -11,6 +11,9 @@ import {
 import { aggregateLedger } from '@/lib/services/ledgerAggregator';
 import { solveMinimalSettlements, buildExplainabilityTree } from '@/lib/services/settlementSolver';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET: Calculate greedy debt minimization transfers and explainability breakdowns
 export async function GET(request, { params }) {
   const { id: tripId } = params;
@@ -29,11 +32,16 @@ export async function GET(request, { params }) {
       const breakdown = buildExplainabilityTree(debtorSummary, tr.receiverMemberId);
 
       // Check if persistent settlement transaction exists in mockSettlements
-      const existing = mockSettlements.find(s => s.id === tr.id);
+      const existing = mockSettlements.find(
+        s => (s.id === tr.id) || (s.payer_member_id === tr.payerMemberId && s.receiver_member_id === tr.receiverMemberId)
+      );
+
       return {
         ...tr,
+        dbId: existing?.id || null,
         status: existing?.status || 'pending',
-        utrNumber: existing?.utrNumber || null,
+        utrNumber: existing?.utr_number || existing?.utrNumber || null,
+        proofData: existing?.breakdown_summary || null,
         breakdown
       };
     });
@@ -88,8 +96,10 @@ export async function GET(request, { params }) {
 
       return {
         ...tr,
+        dbId: existing?.id || null,
         status: existing?.status || 'pending',
         utrNumber: existing?.utr_number || null,
+        proofData: existing?.breakdown_summary || null,
         breakdown
       };
     });

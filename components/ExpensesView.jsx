@@ -12,7 +12,8 @@ import {
   Users,
   ShieldCheck,
   Sparkles,
-  Zap
+  Zap,
+  Camera
 } from 'lucide-react';
 
 export default function ExpensesView({
@@ -21,7 +22,8 @@ export default function ExpensesView({
   ledger,
   currentUserId,
   onOpenAddExpense,
-  onOpenAiAddExpense
+  onOpenAiAddExpense,
+  onOpenOcrExpense
 }) {
   const currentMember = members.find(m => m.user_id === currentUserId);
   const currentMemberSummary = ledger?.memberSummaries?.find(m => m.memberId === currentMember?.id);
@@ -57,6 +59,16 @@ export default function ExpensesView({
               <div className="text-sm font-bold font-mono">₹{Number(ledger?.totalTripCost || 0).toLocaleString()}</div>
             </div>
 
+            {/* OCR + AI Receipt & UPI Screenshot Scanner */}
+            <button
+              onClick={onOpenOcrExpense}
+              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center gap-1.5"
+              title="Scan UPI payment screenshot or receipt using OCR + AI"
+            >
+              <Camera className="w-4 h-4 text-emerald-100" />
+              Scan Receipt / UPI
+            </button>
+
             {/* AI Natural Language Quick Add */}
             <button
               onClick={onOpenAiAddExpense}
@@ -87,17 +99,24 @@ export default function ExpensesView({
           <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
             Record ad-hoc trip expenses like group meals, highway tolls, or snacks.
           </p>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={onOpenOcrExpense}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl shadow-sm flex items-center gap-1.5"
+            >
+              <Camera className="w-3.5 h-3.5" />
+              Scan Receipt / UPI (OCR)
+            </button>
             <button
               onClick={onOpenAiAddExpense}
-              className="px-4 py-2 bg-violet-600 text-white text-xs font-semibold rounded-xl shadow-sm flex items-center gap-1.5"
+              className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold rounded-xl shadow-sm flex items-center gap-1.5"
             >
               <Zap className="w-3.5 h-3.5" />
               AI Quick Add
             </button>
             <button
               onClick={onOpenAddExpense}
-              className="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl shadow-sm"
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl shadow-sm"
             >
               Add First Expense
             </button>
@@ -143,6 +162,17 @@ export default function ExpensesView({
                       <span className="font-mono text-[10px] bg-slate-50 px-1.5 py-0.2 rounded border">
                         UTR: {expense.extracted_details.utr}
                       </span>
+                    )}
+                    {expense.proof_url && (
+                      <a
+                        href={expense.proof_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-200 font-semibold transition"
+                      >
+                        <Camera className="w-3 h-3" />
+                        <span>View Proof</span>
+                      </a>
                     )}
                   </div>
                 </div>

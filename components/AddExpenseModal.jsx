@@ -21,13 +21,13 @@ export default function AddExpenseModal({
   const [proofType, setProofType] = useState('no_proof');
   const [proofUrl, setProofUrl] = useState('');
   const [utr, setUtr] = useState('');
+  const [isDraggingProof, setIsDraggingProof] = useState(false);
   
   const [customMap, setCustomMap] = useState({});
   const [splitPreview, setSplitPreview] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Hydrate initial data if opened via AI Natural Language Parser!
   useEffect(() => {
     if (initialData) {
       if (initialData.title) setTitle(initialData.title);
@@ -36,6 +36,9 @@ export default function AddExpenseModal({
       if (initialData.paidByMemberId) setPaidByMemberId(initialData.paidByMemberId);
       if (initialData.participantMemberIds?.length) setSelectedMemberIds(initialData.participantMemberIds);
       if (initialData.splitMethod) setSplitMethod(initialData.splitMethod);
+      if (initialData.proofType) setProofType(initialData.proofType);
+      if (initialData.proofUrl) setProofUrl(initialData.proofUrl);
+      if (initialData.utr) setUtr(initialData.utr);
     } else if (members.length > 0) {
       if (!paidByMemberId) setPaidByMemberId(members[0].id);
       if (selectedMemberIds.length === 0) setSelectedMemberIds(members.map(m => m.id));
@@ -271,16 +274,153 @@ export default function AddExpenseModal({
               })}
             </div>
 
-            {proofType === 'upi_screenshot' && (
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
-                <label className="font-semibold text-slate-700 block">UPI UTR / Reference ID (12 Digits):</label>
+            {(proofType === 'upi_screenshot' || proofType === 'bill_receipt') && (
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 text-xs">
+                
+                {/* Proof Image Upload & Preview */}
                 <input
-                  type="text"
-                  value={utr}
-                  onChange={(e) => setUtr(e.target.value)}
-                  placeholder="e.g. 428192038192"
-                  className="w-full px-3 py-1.5 border border-slate-200 rounded font-mono text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  type="file"
+                  accept="image/*"
+                  id="proof-upload-input"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = async () => {
+                      const dataUrl = reader.result;
+                      setProofUrl(dataUrl);
+                      
+                      // Run OCR Scan
+                      try {
+                        const res = await fetch(`/api/trips/${tripId}/ai/ocr-expense`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            imageBase64: dataUrl,
+                            mimeType: file.type,
+                            members,
+                            currentMemberId: paidByMemberId
+                          })
+                        });
+                        const data = await res.json();
+                        if (data.success && data.parsed) {
+                          if (data.parsed.utr) setUtr(data.parsed.utr);
+                          if (!totalAmount && data.parsed.totalAmount) setTotalAmount(String(data.parsed.totalAmount));
+                          if (!title && data.parsed.title) setTitle(data.parsed.title);
+                          if (data.parsed.category) setCategory(data.parsed.category);
+                        }
+                      } catch (err) {
+                        console.error('OCR error in modal:', err);
+                      }
+                    };
+                    reader.readAsDataURL(file);
+                  }}
                 />
+
+                <div className="flex items-center justify-between">
+                  <label className="font-semibold text-slate-700 block">
+                    {proofType === 'upi_screenshot' ? 'Upload Payment Screenshot:' : 'Upload Cash Receipt:'}
+                  </label>
+                  {proofUrl && (
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                      <Check className="w-3 h-3 text-emerald-600" />
+                      Proof Attached
+                    </span>
+                  )}
+                </div>
+
+                {proofUrl ? (
+                  <div className="flex items-center gap-3 p-2 bg-white rounded-lg border border-slate-200">
+                    <img
+                      src={proofUrl}
+                      alt="Proof"
+                      className="w-12 h-12 object-cover rounded-md border border-slate-200 shrink-0"
+                    />
+                    <div className="flex-1 truncate">
+                      <span className="text-slate-700 font-bold block truncate text-[11px]">Payment Evidence Image</span>
+                      <span className="text-slate-400 text-[10px] block">Attached for verification</span>
+                    </div>
+                    <label
+                      htmlFor="proof-upload-input"
+                      className="px-2.5 py-1 text-[11px] font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg cursor-pointer transition shrink-0"
+                    >
+                      Change
+                    </label>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="proof-upload-input"
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsDraggingProof(true);
+                    }}
+                    onDragLeave={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsDraggingProof(false);
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsDraggingProof(false);
+                      const file = e.dataTransfer?.files?.[0];
+                      if (!file || !file.type.startsWith('image/')) return;
+                      const reader = new FileReader();
+                      reader.onload = async () => {
+                        const dataUrl = reader.result;
+                        setProofUrl(dataUrl);
+                        try {
+                          const res = await fetch(`/api/trips/${tripId}/ai/ocr-expense`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              imageBase64: dataUrl,
+                              mimeType: file.type,
+                              members,
+                              currentMemberId: paidByMemberId
+                            })
+                          });
+                          const data = await res.json();
+                          if (data.success && data.parsed) {
+                            if (data.parsed.utr) setUtr(data.parsed.utr);
+                            if (!totalAmount && data.parsed.totalAmount) setTotalAmount(String(data.parsed.totalAmount));
+                            if (!title && data.parsed.title) setTitle(data.parsed.title);
+                            if (data.parsed.category) setCategory(data.parsed.category);
+                          }
+                        } catch (err) {
+                          console.error('OCR drop error:', err);
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                    className={`p-3 border-2 border-dashed rounded-xl text-center cursor-pointer transition block ${
+                      isDraggingProof
+                        ? 'border-indigo-600 bg-indigo-100/70 ring-2 ring-indigo-400 scale-[1.01]'
+                        : 'border-slate-300 hover:border-indigo-400 hover:bg-indigo-50/20'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center gap-2 text-indigo-600 font-semibold text-[11px]">
+                      <Camera className="w-4 h-4" />
+                      <span>{isDraggingProof ? 'Drop image here to scan with OCR!' : 'Drag & Drop or Click to Upload Image (Auto-OCR)'}</span>
+                    </div>
+                  </label>
+                )}
+
+                {/* UTR Input */}
+                {proofType === 'upi_screenshot' && (
+                  <div className="pt-1">
+                    <label className="font-semibold text-slate-700 block mb-1">UPI UTR / Reference ID (12 Digits):</label>
+                    <input
+                      type="text"
+                      value={utr}
+                      onChange={(e) => setUtr(e.target.value)}
+                      placeholder="e.g. 428192038192"
+                      className="w-full px-3 py-1.5 border border-slate-200 rounded font-mono text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+                )}
               </div>
             )}
 

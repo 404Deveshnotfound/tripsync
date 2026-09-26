@@ -4,11 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { mockUsers } from '@/lib/mockStore';
-import { Plane, Users, Wifi, WifiOff, LogOut, Shield, Compass, Sparkles, RotateCcw } from 'lucide-react';
+import CompleteProfileModal from '@/components/CompleteProfileModal';
+import { Plane, Users, Wifi, WifiOff, LogOut, Shield, Compass, Sparkles, RotateCcw, QrCode } from 'lucide-react';
 
 export default function Navbar() {
   const { user, profile, isMockMode, signOut, switchMockUser } = useAuth();
   const [isOnline, setIsOnline] = useState(true);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     setIsOnline(navigator.onLine);
@@ -23,6 +25,16 @@ export default function Navbar() {
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
+
+  useEffect(() => {
+    if (user && profile && (!profile.upi_id || profile.upi_id.trim() === '')) {
+      const prompted = sessionStorage.getItem('tripsync_prompted_upi_' + user.id);
+      if (!prompted) {
+        setIsProfileModalOpen(true);
+        sessionStorage.setItem('tripsync_prompted_upi_' + user.id, 'true');
+      }
+    }
+  }, [user, profile]);
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
@@ -98,13 +110,36 @@ export default function Navbar() {
           {/* User Profile / Auth State */}
           {user ? (
             <div className="flex items-center gap-2">
-              <div className="hidden sm:block text-right">
-                <div className="text-xs font-bold text-slate-900">{profile?.full_name || user.email}</div>
-                <div className="text-[10px] text-slate-500 font-mono">{profile?.upi_id || 'No UPI ID'}</div>
-              </div>
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-bold flex items-center justify-center text-sm shadow">
-                {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
-              </div>
+              {/* If no UPI ID, show link button */}
+              {(!profile?.upi_id || profile.upi_id.trim() === '') && (
+                <button
+                  onClick={() => setIsProfileModalOpen(true)}
+                  className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-lg text-xs font-bold transition flex items-center gap-1.5 animate-pulse"
+                  title="Link your UPI ID to receive settlements"
+                >
+                  <QrCode className="w-3.5 h-3.5 text-amber-600" />
+                  <span className="hidden sm:inline">Link UPI</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => setIsProfileModalOpen(true)}
+                className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 transition group text-left"
+                title="Click to edit profile & UPI ID"
+              >
+                <div className="hidden sm:block text-right">
+                  <div className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition">
+                    {profile?.full_name || user.email}
+                  </div>
+                  <div className="text-[10px] text-slate-500 font-mono">
+                    {profile?.upi_id || 'No UPI ID'}
+                  </div>
+                </div>
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-bold flex items-center justify-center text-sm shadow">
+                  {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
+                </div>
+              </button>
+
               <button
                 onClick={signOut}
                 title="Sign Out"
@@ -133,6 +168,13 @@ export default function Navbar() {
         </div>
 
       </div>
+
+      {/* Complete Profile & UPI ID Modal */}
+      <CompleteProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
+
     </header>
   );
 }

@@ -7,6 +7,10 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
 
+  if (!userId || userId === 'null' || userId === 'undefined') {
+    return NextResponse.json({ success: true, trips: [] });
+  }
+
   // Fallback to local mock data if using placeholder Supabase credentials
   if (isUsingPlaceholder()) {
     // Find all trips where the user is a member

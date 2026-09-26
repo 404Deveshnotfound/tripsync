@@ -16,6 +16,7 @@ import {
 export default function AiExpenseParserModal({
   isOpen,
   onClose,
+  tripId,
   members = [],
   currentUserId,
   onParsedApply
@@ -43,7 +44,8 @@ export default function AiExpenseParserModal({
     setError('');
 
     try {
-      const res = await fetch(`/api/trips/current/ai/parse-expense`, {
+      const endpoint = tripId ? `/api/trips/${tripId}/ai/parse-expense` : `/api/trips/current/ai/parse-expense`;
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -78,12 +80,17 @@ export default function AiExpenseParserModal({
         
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-indigo-50 to-slate-50">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">AI Natural Language Expense Entry</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-bold text-slate-900">AI Natural Language Expense Entry</h2>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-mono font-bold uppercase">
+                  Gemini + Groq
+                </span>
+              </div>
               <p className="text-[11px] text-slate-500">Speak or type an expense in plain English</p>
             </div>
           </div>
@@ -158,9 +165,22 @@ export default function AiExpenseParserModal({
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
                   Successfully Extracted Parameters:
                 </span>
-                <span className="text-xs font-black font-mono text-emerald-950">
-                  ₹{Number(parsedResult.totalAmount || 0).toLocaleString()}
-                </span>
+                <div className="flex items-center gap-2">
+                  {parsedResult.source && (
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold border ${
+                      parsedResult.source.includes('Gemini')
+                        ? 'bg-blue-100 text-blue-700 border-blue-200'
+                        : parsedResult.source.includes('Groq')
+                        ? 'bg-amber-100 text-amber-800 border-amber-200'
+                        : 'bg-slate-200 text-slate-700 border-slate-300'
+                    }`}>
+                      {parsedResult.source}
+                    </span>
+                  )}
+                  <span className="text-xs font-black font-mono text-emerald-950">
+                    ₹{Number(parsedResult.totalAmount || 0).toLocaleString()}
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs">

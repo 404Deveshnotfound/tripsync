@@ -9,7 +9,7 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Text prompt required' }, { status: 400 });
     }
 
-    const parsed = parseNaturalLanguageExpense(text, members, currentMemberId);
+    const parsed = await parseNaturalLanguageExpense(text, members, currentMemberId);
     return NextResponse.json({ success: true, parsed });
   } catch (error) {
     console.error('AI parse expense error:', error);

@@ -5,6 +5,8 @@ export async function POST(request) {
   try {
     const { 
       query, 
+      messages = [],
+      trip = null,
       ledger, 
       bookings = [], 
       expenses = [], 
@@ -16,8 +18,10 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Query required' }, { status: 400 });
     }
 
-    const answer = answerFinanceQuestion({
+    const result = await answerFinanceQuestion({
       query,
+      messages,
+      trip,
       ledger,
       bookings,
       expenses,
@@ -25,9 +29,14 @@ export async function POST(request) {
       auditLogs
     });
 
-    return NextResponse.json({ success: true, answer });
+    return NextResponse.json({ 
+      success: true, 
+      answer: result.answer,
+      source: result.source 
+    });
   } catch (error) {
     console.error('AI assistant error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

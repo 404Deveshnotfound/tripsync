@@ -19,6 +19,7 @@ import AddBookingModal from '@/components/AddBookingModal';
 import AddExpenseModal from '@/components/AddExpenseModal';
 import AiExpenseParserModal from '@/components/AiExpenseParserModal';
 import AiFinanceAssistantModal from '@/components/AiFinanceAssistantModal';
+import OcrExpenseModal from '@/components/OcrExpenseModal';
 import { 
   MapPin, 
   Calendar, 
@@ -67,6 +68,7 @@ export default function TripOverviewPage() {
   const [isAddBookingOpen, setIsAddBookingOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isAiExpenseOpen, setIsAiExpenseOpen] = useState(false);
+  const [isOcrExpenseOpen, setIsOcrExpenseOpen] = useState(false);
   const [isAiAssistantOpen, setIsAiAssistantOpen] = useState(false);
   const [aiInitialExpenseData, setAiInitialExpenseData] = useState(null);
 
@@ -179,6 +181,9 @@ export default function TripOverviewPage() {
       paidByMemberId: parsedData.paidByMemberId,
       participantMemberIds: parsedData.participantMemberIds,
       splitMethod: parsedData.splitMethod,
+      proofType: parsedData.proofType || 'no_proof',
+      proofUrl: parsedData.proofUrl || null,
+      utr: parsedData.utr || '',
     });
     setIsAddExpenseOpen(true);
   };
@@ -492,6 +497,7 @@ export default function TripOverviewPage() {
             setIsAddExpenseOpen(true);
           }}
           onOpenAiAddExpense={() => setIsAiExpenseOpen(true)}
+          onOpenOcrExpense={() => setIsOcrExpenseOpen(true)}
         />
       )}
 
@@ -599,6 +605,17 @@ export default function TripOverviewPage() {
       <AiExpenseParserModal
         isOpen={isAiExpenseOpen}
         onClose={() => setIsAiExpenseOpen(false)}
+        tripId={id}
+        members={members}
+        currentUserId={user?.id}
+        onParsedApply={handleAiParsedApply}
+      />
+
+      {/* Phase 8: OCR + AI Receipt & UPI Screenshot Scanner Modal */}
+      <OcrExpenseModal
+        isOpen={isOcrExpenseOpen}
+        onClose={() => setIsOcrExpenseOpen(false)}
+        tripId={id}
         members={members}
         currentUserId={user?.id}
         onParsedApply={handleAiParsedApply}
@@ -608,6 +625,8 @@ export default function TripOverviewPage() {
       <AiFinanceAssistantModal
         isOpen={isAiAssistantOpen}
         onClose={() => setIsAiAssistantOpen(false)}
+        tripId={id}
+        trip={trip}
         ledger={ledger}
         bookings={bookings}
         expenses={expenses}

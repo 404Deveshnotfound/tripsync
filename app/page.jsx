@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import CreateTripModal from '@/components/CreateTripModal';
 import JoinTripModal from '@/components/JoinTripModal';
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { user, profile, loading: authLoading } = useAuth();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,11 @@ export default function DashboardPage() {
   const [isJoinOpen, setIsJoinOpen] = useState(false);
 
   const fetchTrips = async () => {
-    if (!user) return;
+    if (!user) {
+      setTrips([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch(`/api/trips?userId=${user.id}`);
@@ -46,6 +52,7 @@ export default function DashboardPage() {
     if (user) {
       fetchTrips();
     } else if (!authLoading) {
+      setTrips([]);
       setLoading(false);
     }
   }, [user, authLoading]);
@@ -69,7 +76,7 @@ export default function DashboardPage() {
               Living Verified Travel Ledger
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Welcome back, {profile?.full_name?.split(' ')[0] || 'Traveler'}! ✈️
+              {user ? `Welcome back, ${profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'Traveler'}! ✈️` : 'Welcome to TripSync! ✈️'}
             </h1>
             <p className="text-sm text-indigo-100/80 leading-relaxed">
               Coordinate multi-vendor bookings, dynamic recalculation when members leave, and verified UPI settlement.
@@ -79,14 +86,26 @@ export default function DashboardPage() {
           {/* Quick Action Buttons */}
           <div className="flex flex-wrap items-center gap-3">
             <button
-              onClick={() => setIsJoinOpen(true)}
+              onClick={() => {
+                if (!user) {
+                  router.push('/login');
+                  return;
+                }
+                setIsJoinOpen(true);
+              }}
               className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 backdrop-blur transition flex items-center gap-2 shadow-sm"
             >
               <KeyRound className="w-4 h-4 text-indigo-300" />
               Join with Code
             </button>
             <button
-              onClick={() => setIsCreateOpen(true)}
+              onClick={() => {
+                if (!user) {
+                  router.push('/login');
+                  return;
+                }
+                setIsCreateOpen(true);
+              }}
               className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
@@ -151,13 +170,25 @@ export default function DashboardPage() {
             </p>
             <div className="flex items-center justify-center gap-3">
               <button
-                onClick={() => setIsJoinOpen(true)}
+                onClick={() => {
+                  if (!user) {
+                    router.push('/login');
+                    return;
+                  }
+                  setIsJoinOpen(true);
+                }}
                 className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition"
               >
                 Enter Code
               </button>
               <button
-                onClick={() => setIsCreateOpen(true)}
+                onClick={() => {
+                  if (!user) {
+                    router.push('/login');
+                    return;
+                  }
+                  setIsCreateOpen(true);
+                }}
                 className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition"
               >
                 Create a Trip

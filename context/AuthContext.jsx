@@ -11,6 +11,8 @@ const AuthContext = createContext({
   isMockMode: false,
   signIn: async () => {},
   signUp: async () => {},
+  signInWithGoogle: async () => {},
+  updateProfile: async () => {},
   signOut: async () => {},
   switchMockUser: () => {},
 });
@@ -121,17 +123,67 @@ export function AuthProvider({ children }) {
     return { data, error };
   };
 
+  // Sign In with Google OAuth
+  const signInWithGoogle = async () => {
+    if (isMockMode) {
+      const found = mockUsers[0];
+      setUser({ id: found.id, email: found.email });
+      setProfile(found);
+      localStorage.setItem('tripsync_mock_user', JSON.stringify(found));
+      return { data: { user: found }, error: null };
+    }
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    return { data, error };
+  };
+
+  // Update Profile (UPI ID, Phone, Name)
+  const updateProfile = async ({ fullName, upiId, phone }) => {
+    if (!user) return { error: 'Not authenticated' };
+
+    try {
+      const res = await fetch('/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          fullName: fullName ?? profile?.full_name,
+          upiId: upiId ?? profile?.upi_id,
+          phone: phone ?? profile?.phone
+        })
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Failed to update profile');
+
+      setProfile(data.profile);
+      return { success: true, profile: data.profile };
+    } catch (err) {
+      console.error('Update profile error:', err);
+      return { error: err.message };
+    }
+  };
+
   // Sign Out
   const signOut = async () => {
-    if (isMockMode) {
-      localStorage.removeItem('tripsync_mock_user');
+    try {
+      if (isMockMode) {
+        localStorage.removeItem('tripsync_mock_user');
+      } else {
+        await supabase.auth.signOut();
+      }
+    } catch (err) {
+      console.error('Sign out error:', err);
+    } finally {
       setUser(null);
       setProfile(null);
-      return;
+      window.location.href = '/';
     }
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
   };
 
   // Switch between mock demo users instantly
@@ -153,6 +205,8 @@ export function AuthProvider({ children }) {
         isMockMode,
         signIn,
         signUp,
+        signInWithGoogle,
+        updateProfile,
         signOut,
         switchMockUser,
       }}

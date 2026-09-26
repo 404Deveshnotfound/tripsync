@@ -1,4 +1,5 @@
 import './globals.css';
+import Script from 'next/script';
 import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
 
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col">
+        <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
         <AuthProvider>
           <Navbar />
           <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">

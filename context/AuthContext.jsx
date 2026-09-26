@@ -12,6 +12,7 @@ const AuthContext = createContext({
   signIn: async () => {},
   signUp: async () => {},
   signInWithGoogle: async () => {},
+  signInWithGoogleIdToken: async () => {},
   updateProfile: async () => {},
   signOut: async () => {},
   switchMockUser: () => {},
@@ -142,6 +143,23 @@ export function AuthProvider({ children }) {
     return { data, error };
   };
 
+  // Sign In with Google ID Token (Native GIS Popup - no supabase.co redirect)
+  const signInWithGoogleIdToken = async (idToken) => {
+    if (isMockMode) {
+      const found = mockUsers[0];
+      setUser({ id: found.id, email: found.email });
+      setProfile(found);
+      localStorage.setItem('tripsync_mock_user', JSON.stringify(found));
+      return { data: { user: found }, error: null };
+    }
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token: idToken,
+    });
+    return { data, error };
+  };
+
   // Update Profile (UPI ID, Phone, Name)
   const updateProfile = async ({ fullName, upiId, phone }) => {
     if (!user) return { error: 'Not authenticated' };
@@ -206,6 +224,7 @@ export function AuthProvider({ children }) {
         signIn,
         signUp,
         signInWithGoogle,
+        signInWithGoogleIdToken,
         updateProfile,
         signOut,
         switchMockUser,

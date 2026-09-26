@@ -332,7 +332,7 @@ export default function AddBookingModal({ isOpen, onClose, tripId, members = [],
                   return (
                     <div key={p.memberId} className="flex items-center justify-between bg-white/80 p-2 rounded-lg border border-indigo-100/50">
                       <span className="text-slate-700 truncate">{member?.display_name?.split(' ')[0]}:</span>
-                      <span className="font-mono font-bold text-indigo-950">₹{p.shareAmount.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-indigo-950">₹{Number(p.shareAmount || 0).toLocaleString()}</span>
                     </div>
                   );
                 })}

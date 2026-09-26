@@ -108,7 +108,7 @@ export default function FinancialHealthDashboard({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Total Trip Spend</span>
           <div className="text-2xl font-black text-slate-900 font-mono">
-            ₹{totalSpend.toLocaleString()}
+            ₹{Number(totalSpend || 0).toLocaleString()}
           </div>
           <span className="text-[11px] text-slate-400">
             Across {bookings.length} bookings &amp; {expenses.length} expenses
@@ -119,10 +119,10 @@ export default function FinancialHealthDashboard({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs text-emerald-600 font-semibold uppercase tracking-wider block">Verified Spend</span>
           <div className="text-2xl font-black text-emerald-600 font-mono">
-            ₹{verifiedAmount.toLocaleString()}
+            ₹{Number(verifiedAmount || 0).toLocaleString()}
           </div>
           <span className="text-[11px] text-slate-400">
-            {unverifiedAmount > 0 ? `₹${unverifiedAmount.toLocaleString()} pending verification` : '100% authenticated'}
+            {unverifiedAmount > 0 ? `₹${Number(unverifiedAmount || 0).toLocaleString()} pending verification` : '100% authenticated'}
           </span>
         </div>
 
@@ -130,7 +130,7 @@ export default function FinancialHealthDashboard({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs text-indigo-600 font-semibold uppercase tracking-wider block">Refunds &amp; Savings</span>
           <div className="text-2xl font-black text-indigo-600 font-mono">
-            ₹{totalRefunds.toLocaleString()}
+            ₹{Number(totalRefunds || 0).toLocaleString()}
           </div>
           <span className="text-[11px] text-slate-400">
             Returned directly to member balances
@@ -141,7 +141,7 @@ export default function FinancialHealthDashboard({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs text-amber-600 font-semibold uppercase tracking-wider block">Unverified / Disputed</span>
           <div className="text-2xl font-black text-amber-600 font-mono">
-            ₹{(unverifiedAmount + disputedAmount).toLocaleString()}
+            ₹{Number((unverifiedAmount || 0) + (disputedAmount || 0)).toLocaleString()}
           </div>
           <span className="text-[11px] text-slate-400">
             Requires Manager or Group Poll sign-off

@@ -184,8 +184,8 @@ export default function SettlementView({
                 m.isDebtor ? 'text-rose-600' :
                 'text-slate-400'
               }`}>
-                {m.isCreditor ? `+₹${m.netBalance.toLocaleString()}` :
-                 m.isDebtor ? `-₹${Math.abs(m.netBalance).toLocaleString()}` :
+                {m.isCreditor ? `+₹${Number(m.netBalance || 0).toLocaleString()}` :
+                 m.isDebtor ? `-₹${Number(Math.abs(m.netBalance || 0)).toLocaleString()}` :
                  '₹0.00'}
               </div>
 
@@ -264,7 +264,7 @@ export default function SettlementView({
                       <div className="text-right">
                         <div className="text-xs text-slate-400">Transfer Amount:</div>
                         <div className="text-xl font-extrabold text-slate-900 font-mono">
-                          ₹{tr.amount.toLocaleString()}
+                          ₹{Number(tr.amount || 0).toLocaleString()}
                         </div>
                       </div>
 
@@ -329,7 +329,7 @@ export default function SettlementView({
                                 </span>
                               </div>
                               <span className="font-extrabold text-slate-900 font-mono">
-                                ₹{item.shareAmount.toLocaleString()}
+                                ₹{Number(item.shareAmount ?? item.amount ?? 0).toLocaleString()}
                               </span>
                             </div>
                           ))
@@ -373,7 +373,7 @@ export default function SettlementView({
                 Pay {activeQrModalTransfer.receiverName}
               </h3>
               <div className="text-3xl font-black text-indigo-600 font-mono mt-1">
-                ₹{activeQrModalTransfer.amount.toLocaleString()}
+                ₹{Number(activeQrModalTransfer.amount || 0).toLocaleString()}
               </div>
               <p className="text-xs font-mono text-slate-500 mt-1">
                 UPI ID: {activeQrModalTransfer.receiverUpiId}

@@ -222,7 +222,7 @@ export default function MasterItineraryView({
                   <div>
                     <div className="text-slate-400 text-[10px]">Total Booking Cost:</div>
                     <div className="font-extrabold text-slate-900 text-base">
-                      ₹{cost.toLocaleString()}
+                      ₹{Number(cost || 0).toLocaleString()}
                     </div>
                     <div className="text-[10px] text-slate-500">
                       Fronted by <strong className="text-slate-800">{payer?.display_name?.split(' ')[0] || 'Group'}</strong>
@@ -235,9 +235,9 @@ export default function MasterItineraryView({
                     </div>
                     <div className="font-extrabold text-indigo-700 text-base font-mono">
                       {isParticipant && myAllocation ? (
-                        `₹${myAllocation.shareAmount.toLocaleString()}`
+                        `₹${Number(myAllocation.shareAmount ?? myAllocation.amount ?? 0).toLocaleString()}`
                       ) : (
-                        `₹${Math.round(cost / (booking.participant_member_ids?.length || 1)).toLocaleString()}`
+                        `₹${Number(Math.round((cost || 0) / (booking.participant_member_ids?.length || 1))).toLocaleString()}`
                       )}
                     </div>
                     <div className="text-[10px] text-slate-400 capitalize">

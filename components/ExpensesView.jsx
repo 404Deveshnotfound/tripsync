@@ -39,22 +39,22 @@ export default function ExpensesView({
             </span>
             <div className="text-xl sm:text-2xl font-black">
               {currentMemberSummary.isCreditor ? (
-                <span className="text-emerald-400">You are owed ₹{currentMemberSummary.netBalance.toLocaleString()}</span>
+                <span className="text-emerald-400">You are owed ₹{Number(currentMemberSummary.netBalance || 0).toLocaleString()}</span>
               ) : currentMemberSummary.isDebtor ? (
-                <span className="text-amber-300">You owe ₹{Math.abs(currentMemberSummary.netBalance).toLocaleString()}</span>
+                <span className="text-amber-300">You owe ₹{Number(Math.abs(currentMemberSummary.netBalance || 0)).toLocaleString()}</span>
               ) : (
                 <span className="text-slate-300">All Settled Up (₹0.00)</span>
               )}
             </div>
             <p className="text-xs text-slate-400">
-              Total Fronted: ₹{currentMemberSummary.totalPaid.toLocaleString()} &bull; Total Share: ₹{currentMemberSummary.totalShare.toLocaleString()}
+              Total Fronted: ₹{Number(currentMemberSummary.totalPaid || 0).toLocaleString()} &bull; Total Share: ₹{Number(currentMemberSummary.totalShare || 0).toLocaleString()}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <div className="bg-white/10 px-3.5 py-2 rounded-xl text-center border border-white/10">
               <div className="text-[10px] text-slate-300 uppercase">Trip Spend</div>
-              <div className="text-sm font-bold font-mono">₹{ledger?.totalTripCost?.toLocaleString() || 0}</div>
+              <div className="text-sm font-bold font-mono">₹{Number(ledger?.totalTripCost || 0).toLocaleString()}</div>
             </div>
 
             {/* AI Natural Language Quick Add */}
@@ -150,11 +150,11 @@ export default function ExpensesView({
                 {/* Right Financial Liability */}
                 <div className="text-left sm:text-right shrink-0">
                   <div className="text-base font-extrabold text-slate-900">
-                    ₹{expense.total_amount.toLocaleString()}
+                    ₹{Number(expense.total_amount || 0).toLocaleString()}
                   </div>
                   {myAlloc ? (
                     <div className="text-xs text-indigo-600 font-semibold font-mono">
-                      Your share: ₹{myAlloc.shareAmount.toLocaleString()}
+                      Your share: ₹{Number(myAlloc.shareAmount ?? myAlloc.amount ?? 0).toLocaleString()}
                     </div>
                   ) : (
                     <div className="text-xs text-slate-400">Did not participate</div>

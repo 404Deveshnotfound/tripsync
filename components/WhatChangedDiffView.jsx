@@ -191,14 +191,14 @@ export default function WhatChangedDiffView({
                       <div className="flex items-baseline justify-between pt-1">
                         <span className="text-xs text-slate-500">Booking Cost:</span>
                         <span className="text-sm font-bold text-slate-800 font-mono">
-                          ₹{before?.totalCost?.toLocaleString()}
+                          ₹{Number(before?.totalCost || 0).toLocaleString()}
                         </span>
                       </div>
 
                       <div className="flex items-baseline justify-between pt-1 border-t border-slate-200/60">
                         <span className="text-xs font-bold text-slate-700">Per Person Share:</span>
                         <span className="text-base font-extrabold text-slate-900 font-mono">
-                          ₹{before?.perPersonCost?.toLocaleString()}
+                          ₹{Number(before?.perPersonCost || 0).toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -227,14 +227,14 @@ export default function WhatChangedDiffView({
                       <div className="flex items-baseline justify-between pt-1">
                         <span className="text-xs text-indigo-600/80">Booking Cost:</span>
                         <span className="text-sm font-bold text-indigo-950 font-mono">
-                          ₹{after?.totalCost?.toLocaleString()}
+                          ₹{Number(after?.totalCost || 0).toLocaleString()}
                         </span>
                       </div>
 
                       <div className="flex items-baseline justify-between pt-1 border-t border-indigo-200/60">
                         <span className="text-xs font-bold text-indigo-900">New Per Person Share:</span>
                         <span className="text-base font-extrabold text-indigo-700 font-mono">
-                          ₹{after?.perPersonCost?.toLocaleString()}
+                          ₹{Number(after?.perPersonCost || 0).toLocaleString()}
                         </span>
                       </div>
                     </div>

@@ -321,7 +321,7 @@ export default function TripOverviewPage() {
             <div>
               <div className="text-xs text-slate-400">Total Group Spend:</div>
               <div className="text-2xl font-black font-mono">
-                ₹{ledger?.totalTripCost?.toLocaleString() || '0'}
+                ₹{Number(ledger?.totalTripCost || 0).toLocaleString()}
               </div>
             </div>
             <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
@@ -425,12 +425,12 @@ export default function TripOverviewPage() {
                               summary.isDebtor ? 'text-rose-600' :
                               'text-slate-600'
                             }`}>
-                              {summary.isCreditor ? `+₹${summary.netBalance.toLocaleString()}` :
-                               summary.isDebtor ? `-₹${Math.abs(summary.netBalance).toLocaleString()}` :
+                              {summary.isCreditor ? `+₹${Number(summary.netBalance || 0).toLocaleString()}` :
+                               summary.isDebtor ? `-₹${Number(Math.abs(summary.netBalance || 0)).toLocaleString()}` :
                                '₹0.00'}
                             </div>
                             <div className="text-[10px] text-slate-400">
-                              Paid: ₹{summary.totalPaid.toLocaleString()} | Share: ₹{summary.totalShare.toLocaleString()}
+                              Paid: ₹{Number(summary.totalPaid || 0).toLocaleString()} | Share: ₹{Number(summary.totalShare || 0).toLocaleString()}
                             </div>
                           </div>
                         ) : (

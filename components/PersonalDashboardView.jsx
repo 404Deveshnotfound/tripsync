@@ -69,8 +69,8 @@ export default function PersonalDashboardView({
               mySummary?.isDebtor ? 'text-amber-300' :
               'text-slate-300'
             }`}>
-              {mySummary?.isCreditor ? `+₹${mySummary.netBalance.toLocaleString()}` :
-               mySummary?.isDebtor ? `-₹${Math.abs(mySummary.netBalance).toLocaleString()}` :
+              {mySummary?.isCreditor ? `+₹${Number(mySummary.netBalance || 0).toLocaleString()}` :
+               mySummary?.isDebtor ? `-₹${Number(Math.abs(mySummary.netBalance || 0)).toLocaleString()}` :
                '₹0.00'}
             </div>
             <span className="text-[11px] text-slate-300">
@@ -86,7 +86,7 @@ export default function PersonalDashboardView({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Total Amount You Paid</span>
           <div className="text-2xl font-black text-slate-900 font-mono">
-            ₹{mySummary?.totalPaid?.toLocaleString() || 0}
+            ₹{Number(mySummary?.totalPaid || 0).toLocaleString()}
           </div>
           <span className="text-[11px] text-slate-400">
             Fronted for group activities and bookings
@@ -96,7 +96,7 @@ export default function PersonalDashboardView({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs text-indigo-600 font-semibold uppercase tracking-wider block">Your Actual Share</span>
           <div className="text-2xl font-black text-indigo-600 font-mono">
-            ₹{mySummary?.totalShare?.toLocaleString() || 0}
+            ₹{Number(mySummary?.totalShare || 0).toLocaleString()}
           </div>
           <span className="text-[11px] text-slate-400">
             Across {myBookings.length} bookings &amp; {myParticipatingExpenses.length} meals/expenses
@@ -142,7 +142,7 @@ export default function PersonalDashboardView({
                   <div className="text-[11px] text-slate-400 font-mono">UPI: {st.receiverUpiId}</div>
                 </div>
                 <div className="font-black font-mono text-slate-900 text-sm">
-                  ₹{st.amount.toLocaleString()}
+                  ₹{Number(st.amount || 0).toLocaleString()}
                 </div>
               </div>
             ))}
@@ -183,7 +183,7 @@ export default function PersonalDashboardView({
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                     <span className="text-slate-400">Your Share:</span>
                     <span className="font-extrabold text-indigo-600 font-mono">
-                      ₹{myAlloc?.shareAmount?.toLocaleString() || '0'}
+                      ₹{Number(myAlloc?.shareAmount ?? myAlloc?.amount ?? 0).toLocaleString()}
                     </span>
                   </div>
                 </div>

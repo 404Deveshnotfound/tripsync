@@ -159,7 +159,7 @@ export default function AiExpenseParserModal({
                   Successfully Extracted Parameters:
                 </span>
                 <span className="text-xs font-black font-mono text-emerald-950">
-                  ₹{parsedResult.totalAmount?.toLocaleString()}
+                  ₹{Number(parsedResult.totalAmount || 0).toLocaleString()}
                 </span>
               </div>
 

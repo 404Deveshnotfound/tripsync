@@ -199,7 +199,7 @@ export default function WhatIfSimulatorView({
           <div className="space-y-1">
             <div className="text-xs text-slate-400">Total Group Spend:</div>
             <div className="text-2xl font-black font-mono text-slate-900">
-              ₹{ledger?.totalTripCost?.toLocaleString() || 0}
+              ₹{Number(ledger?.totalTripCost || 0).toLocaleString()}
             </div>
             <p className="text-[11px] text-slate-500">
               Across {activeMembers.length} active group members
@@ -212,7 +212,7 @@ export default function WhatIfSimulatorView({
               {ledger?.memberSummaries?.map(m => (
                 <div key={m.memberId} className="py-1.5 flex justify-between">
                   <span className="text-slate-600">{m.displayName}:</span>
-                  <span className="font-mono font-bold text-slate-900">₹{m.totalShare.toLocaleString()}</span>
+                  <span className="font-mono font-bold text-slate-900">₹{Number(m.totalShare || 0).toLocaleString()}</span>
                 </div>
               ))}
             </div>
@@ -233,7 +233,7 @@ export default function WhatIfSimulatorView({
           <div className="space-y-1">
             <div className="text-xs text-indigo-600/80">Simulated Total Spend:</div>
             <div className="text-2xl font-black font-mono text-indigo-950">
-              ₹{simulatedOutcome?.simLedger?.totalTripCost?.toLocaleString() || 0}
+              ₹{Number(simulatedOutcome?.simLedger?.totalTripCost || 0).toLocaleString()}
             </div>
             
             {/* Impact Delta */}
@@ -241,7 +241,7 @@ export default function WhatIfSimulatorView({
               {simulationType === 'refund' ? (
                 <span className="text-emerald-700 flex items-center gap-1">
                   <TrendingDown className="w-3.5 h-3.5" />
-                  Total Group Savings: ₹{simulatedOutcome?.refundAmt?.toLocaleString()} (-₹{simulatedOutcome?.savingsPerPerson} / person)
+                  Total Group Savings: ₹{Number(simulatedOutcome?.refundAmt || 0).toLocaleString()} (-₹{simulatedOutcome?.savingsPerPerson || 0} / person)
                 </span>
               ) : (
                 <span className="text-amber-800 flex items-center gap-1">
@@ -263,7 +263,7 @@ export default function WhatIfSimulatorView({
                   <div key={m.memberId} className="py-1.5 flex justify-between items-center">
                     <span className="text-indigo-900 font-medium">{m.displayName}:</span>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-indigo-950">₹{m.totalShare.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-indigo-950">₹{Number(m.totalShare || 0).toLocaleString()}</span>
                       {delta !== 0 && (
                         <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${
                           delta > 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'

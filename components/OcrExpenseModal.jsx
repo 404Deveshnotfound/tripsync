@@ -163,7 +163,45 @@ export default function OcrExpenseModal({
     processImage(dataUrl, 'image/png');
   };
 
-  const handleFileChange = (e) => {
+  const compressAndResizeImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Return high quality lightweight JPEG data URL
+          const compressed = canvas.toDataURL('image/jpeg', 0.85);
+          resolve(compressed);
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -173,13 +211,20 @@ export default function OcrExpenseModal({
     }
 
     setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result;
-      setPreviewUrl(result);
-      processImage(result, file.type);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const dataUrl = await compressAndResizeImage(file);
+      setPreviewUrl(dataUrl);
+      processImage(dataUrl, 'image/jpeg');
+    } catch (err) {
+      console.warn('Compression failed, using original reader:', err);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        setPreviewUrl(result);
+        processImage(result, file.type);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -196,7 +241,7 @@ export default function OcrExpenseModal({
     setIsDragging(false);
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -211,13 +256,20 @@ export default function OcrExpenseModal({
     }
 
     setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result;
-      setPreviewUrl(result);
-      processImage(result, file.type);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const dataUrl = await compressAndResizeImage(file);
+      setPreviewUrl(dataUrl);
+      processImage(dataUrl, 'image/jpeg');
+    } catch (err) {
+      console.warn('Compression failed on drop, using original reader:', err);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        setPreviewUrl(result);
+        processImage(result, file.type);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const processImage = async (base64Data, mimeType) => {

@@ -15,11 +15,14 @@ import AddExpenseModal from '@/components/AddExpenseModal';
 import AiExpenseParserModal from '@/components/AiExpenseParserModal';
 import AiFinanceAssistantModal from '@/components/AiFinanceAssistantModal';
 import OcrExpenseModal from '@/components/OcrExpenseModal';
+import WeatherDigitalTwinView from '@/components/WeatherDigitalTwinView';
 import { 
   MapPin, 
   Calendar, 
   Users, 
   ShieldCheck, 
+  CloudRain,
+  Radio,
   Copy, 
   Check, 
   UserPlus, 
@@ -409,6 +412,7 @@ export default function TripOverviewPage() {
         <div className="mt-8 pt-4 border-t border-slate-100 flex items-center gap-2 overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview & Members', icon: Users },
+            { id: 'digital-twin', label: 'Weather Digital Twin 🌪️', icon: CloudRain, highlight: true },
             { id: 'personal', label: 'My Dashboard', icon: UserCheck },
             { id: 'expenses', label: `Expenses & Splits (${expenses.length + bookings.length})`, icon: DollarSign },
             { id: 'logs', label: `Transaction Log (${auditLogs.length + expenses.length + bookings.length})`, icon: History },
@@ -426,6 +430,8 @@ export default function TripOverviewPage() {
                 className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition ${
                   isActive
                     ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-200'
+                    : tab.highlight
+                    ? 'bg-gradient-to-r from-purple-50 to-indigo-50 text-indigo-700 border border-indigo-300 font-bold hover:from-purple-100 hover:to-indigo-100 shadow-sm'
                     : tab.alert
                     ? 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -633,6 +639,17 @@ export default function TripOverviewPage() {
           bookings={bookings}
           expenses={expenses}
           members={members}
+        />
+      )}
+
+      {/* Tab: Weather-Driven AI Digital Twin (HackCelestial 3.0 Midnight Task & Nugen Aligned) */}
+      {activeTab === 'digital-twin' && (
+        <WeatherDigitalTwinView
+          tripId={id}
+          destination={trip?.destination || 'Goa, India'}
+          onLedgerUpdated={loadTripData}
+          expenses={expenses}
+          bookings={bookings}
         />
       )}
 

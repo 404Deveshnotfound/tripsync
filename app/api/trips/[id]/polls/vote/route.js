@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { mockChatMessages, mockExpenses, isUsingPlaceholder } from '@/lib/mockStore';
 
+function isUuid(str) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+}
+
 // POST: Cast vote on an in-chat poll
 export async function POST(request, { params }) {
   const { id: tripId } = params;
@@ -13,7 +17,7 @@ export async function POST(request, { params }) {
       return NextResponse.json({ success: false, error: 'PollId, memberId, and vote are required' }, { status: 400 });
     }
 
-    if (isUsingPlaceholder()) {
+    if (isUsingPlaceholder() || !isUuid(tripId)) {
       const chatMsg = mockChatMessages.find(m => m.poll_data?.id === pollId && m.trip_id === tripId);
       if (!chatMsg || !chatMsg.poll_data) {
         return NextResponse.json({ success: false, error: 'Poll not found' }, { status: 404 });

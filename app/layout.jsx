@@ -1,4 +1,5 @@
 import './globals.css';
+import 'leaflet/dist/leaflet.css';
 import Script from 'next/script';
 import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';

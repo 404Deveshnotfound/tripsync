@@ -28,7 +28,7 @@ export default function AiFinanceAssistantModal({
   const [messages, setMessages] = useState([
     {
       sender: 'ai',
-      text: `👋 Hi! I am your **TripSync AI Finance Copilot** (powered by Google Gemini & Groq).\n\nI analyze your live deterministic ledger and can explain dues, recent recalculations, category budgets, or answer any group trip question.\n\nTry tapping a question below or ask anything!`,
+      text: `👋 Hi! I am your **TripSync AI Finance Copilot**.\n\nI can explain your group travel ledger, balance breakdowns, "What Changed?" recalculation snapshots, and debt settlement paths.\n\nTry tapping a question below or ask me anything about balances, bookings, or debt settlements!`,
       source: 'Google Gemini'
     }
   ]);
@@ -111,19 +111,21 @@ export default function AiFinanceAssistantModal({
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 flex items-center justify-center shadow-inner">
-              <Bot className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 text-indigo-300" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-bold tracking-tight">
                   TripSync AI Finance Copilot
                 </h2>
-                <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono uppercase font-bold flex items-center gap-1">
+                <span className="text-[9px] bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 px-2 py-0.5 rounded-full font-mono uppercase font-bold flex items-center gap-1 shadow-xs">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Gemini + Groq
+                  Gemini & Groq AI
                 </span>
               </div>
-              <p className="text-[11px] text-slate-300">Ground-truth financial reasoning from live ledger</p>
+              <p className="text-[10px] text-slate-300">
+                Deterministic Living Ledger Intelligence & Recalculation Explainer
+              </p>
             </div>
           </div>
           <button
@@ -132,6 +134,17 @@ export default function AiFinanceAssistantModal({
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Feature Sub-bar */}
+        <div className="bg-indigo-950/60 border-b border-indigo-500/20 px-4 py-1.5 flex items-center justify-between text-[10px] text-indigo-200 font-mono">
+          <span className="flex items-center gap-1.5">
+            <Zap className="w-3 h-3 text-emerald-400" />
+            <span>Real-Time Group Ledger Analysis & Debt Settlement Intelligence</span>
+          </span>
+          <span className="bg-indigo-500/20 px-2 py-0.5 rounded border border-indigo-400/30 text-[9px]">
+            Live Sync
+          </span>
         </div>
 
         {/* Chat Stream */}
@@ -146,17 +159,15 @@ export default function AiFinanceAssistantModal({
                   <span className="font-bold text-indigo-600 flex items-center gap-1.5">
                     <Bot className="w-3.5 h-3.5" /> 
                     <span>TripSync AI</span>
-                    {m.source && (
-                      <span className={`text-[9px] px-1.5 py-0.2 rounded font-medium border ${
+                      <span className={`text-[9px] px-2 py-0.5 rounded-full font-medium border shadow-xs ${
                         m.source.includes('Gemini') 
-                          ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                          ? 'bg-blue-50 text-blue-700 border-blue-200 font-bold' 
                           : m.source.includes('Groq')
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
+                          ? 'bg-amber-50 text-amber-700 border-amber-200 font-bold'
                           : 'bg-slate-100 text-slate-600 border-slate-200'
                       }`}>
                         {m.source}
                       </span>
-                    )}
                   </span>
                 ) : (
                   <span className="font-bold text-slate-700">You</span>

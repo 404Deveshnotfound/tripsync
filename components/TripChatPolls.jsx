@@ -29,7 +29,7 @@ export default function TripChatPolls({
   const [loading, setLoading] = useState(false);
   const [approvingExpenseId, setApprovingExpenseId] = useState(null);
 
-  const currentMember = members.find(m => m.user_id === currentUserId);
+  const currentMember = members.find(m => m.user_id === currentUserId || m.id === currentUserId) || members[0];
   const currentMemberId = currentMember?.id;
 
   const handleSendMessage = async (e) => {
@@ -149,16 +149,26 @@ export default function TripChatPolls({
             const required = poll.required_votes || 2;
             const isApproved = poll.status === 'approved';
 
+            const submitterMember = members.find(m => m.id === msg.sender_id || m.user_id === msg.sender_id || m.id === poll.expense_id);
+            const submitterName = (poll.paid_by && poll.paid_by !== 'Traveler')
+              ? poll.paid_by
+              : submitterMember?.display_name || msg.sender_name || msg.trip_members?.display_name || 'Traveler';
+
             return (
               <div key={msg.id} className="max-w-md mx-auto my-4 w-full">
                 <div className="bg-gradient-to-br from-indigo-50/80 to-slate-50 border border-indigo-200 rounded-2xl p-5 shadow-sm space-y-3">
                   
                   {/* Poll Header */}
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800">
-                      <Vote className="w-3 h-3 text-indigo-600" />
-                      Verification Poll
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800">
+                        <Vote className="w-3 h-3 text-indigo-600" />
+                        Verification Poll
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        by <strong className="text-slate-800">{submitterName}</strong>
+                      </span>
+                    </div>
 
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                       isApproved 
@@ -175,7 +185,7 @@ export default function TripChatPolls({
                       {poll.title}
                     </h4>
                     <div className="text-xs text-slate-600 font-mono font-bold mt-1">
-                      Amount: <span className="text-indigo-600">₹{poll.amount}</span> &bull; Submitted by {poll.paid_by}
+                      Amount: <span className="text-indigo-600 font-black">₹{Number(poll.amount || 0).toLocaleString()}</span> &bull; Submitted by <strong className="text-slate-900">{submitterName}</strong>
                     </div>
                     <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
                       {msg.content}
@@ -252,12 +262,17 @@ export default function TripChatPolls({
           }
 
           // Regular text message bubble
+          const senderMember = members.find(m => m.id === msg.sender_id || m.user_id === msg.sender_id);
+          const senderDisplayName = (msg.sender_name && msg.sender_name !== 'Traveler')
+            ? msg.sender_name
+            : msg.trip_members?.display_name || senderMember?.display_name || (isMe ? 'You' : 'Traveler');
+
           return (
             <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
               <div className="flex items-center gap-1 text-[11px] text-slate-400 mb-0.5">
-                <span className="font-semibold text-slate-700">{msg.sender_name || 'Traveler'}</span>
+                <span className="font-semibold text-slate-700">{senderDisplayName}</span>
                 <span>&bull;</span>
-                <span>{new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <span>{msg.created_at ? new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now'}</span>
               </div>
               <div className={`px-4 py-2.5 rounded-2xl max-w-sm text-xs leading-relaxed ${
                 isMe 

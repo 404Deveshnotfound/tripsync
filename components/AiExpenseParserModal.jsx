@@ -87,11 +87,12 @@ export default function AiExpenseParserModal({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold text-slate-900">AI Natural Language Expense Entry</h2>
-                <span className="text-[9px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-mono font-bold uppercase">
-                  Gemini + Groq
+                <span className="text-[9px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full font-mono font-bold uppercase flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                  Gemini & Groq AI
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500">Speak or type an expense in plain English</p>
+              <p className="text-[11px] text-slate-500">Fast natural language parsing for expenses and split allocations</p>
             </div>
           </div>
           <button
@@ -167,7 +168,7 @@ export default function AiExpenseParserModal({
                 </span>
                 <div className="flex items-center gap-2">
                   {parsedResult.source && (
-                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold border ${
+                    <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border shadow-xs ${
                       parsedResult.source.includes('Gemini')
                         ? 'bg-blue-100 text-blue-700 border-blue-200'
                         : parsedResult.source.includes('Groq')

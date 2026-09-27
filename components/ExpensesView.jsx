@@ -53,7 +53,7 @@ export default function ExpensesView({
   const [subSection, setSubSection] = useState('master'); // 'master' | 'personal'
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const currentMember = members.find(m => m.user_id === currentUserId);
+  const currentMember = members.find(m => m.user_id === currentUserId || m.id === currentUserId) || members[0];
   const currentMemberId = currentMember?.id;
   const currentMemberSummary = ledger?.memberSummaries?.find(m => m.memberId === currentMemberId);
 
@@ -73,7 +73,7 @@ export default function ExpensesView({
         date: b.start_time?.split('T')[0] || b.created_at?.split('T')[0] || 'Scheduled',
         splitMethod: b.split_method || 'equal',
         allocations: b.allocations || [],
-        participantMemberIds: b.participant_member_ids || b.allocations?.map(a => a.memberId) || [],
+        participantMemberIds: b.participant_member_ids || b.allocations?.map(a => a.memberId || a.member_id) || [],
         vendorName: b.vendor_name || null,
         bookingReference: b.booking_reference || null,
         verificationStatus: 'verified',
@@ -97,7 +97,7 @@ export default function ExpensesView({
         date: e.date || e.created_at?.split('T')[0] || 'Recent',
         splitMethod: e.split_method || 'equal',
         allocations: e.allocations || [],
-        participantMemberIds: e.participant_member_ids || e.allocations?.map(a => a.memberId) || [],
+        participantMemberIds: e.participant_member_ids || e.extracted_details?.participantMemberIds || e.allocations?.map(a => a.memberId || a.member_id) || [],
         vendorName: vendor || null,
         bookingReference: ref || null,
         verificationStatus: e.verification_status || 'verified',
@@ -116,8 +116,8 @@ export default function ExpensesView({
     if (!currentMemberId) return [];
     return allTransactions.filter(item => {
       const isPayer = item.paidByMemberId === currentMemberId;
-      const isParticipant = item.participantMemberIds?.includes(currentMemberId) ||
-        item.allocations?.some(a => a.memberId === currentMemberId && (a.shareAmount > 0 || a.amount > 0));
+      const isParticipant = (item.participantMemberIds && item.participantMemberIds.includes(currentMemberId)) ||
+        item.allocations?.some(a => (a.memberId === currentMemberId || a.member_id === currentMemberId) && (Number(a.shareAmount ?? a.amount ?? 0) > 0));
       return isPayer || isParticipant;
     });
   }, [allTransactions, currentMemberId]);
@@ -286,8 +286,9 @@ export default function ExpensesView({
           {filteredList.map((item) => {
             const payer = members.find(m => m.id === item.paidByMemberId);
             const isUserPayer = currentMemberId && item.paidByMemberId === currentMemberId;
-            const myAlloc = item.allocations?.find(a => a.memberId === currentMemberId);
+            const myAlloc = item.allocations?.find(a => a.memberId === currentMemberId || a.member_id === currentMemberId);
             const myShareAmount = myAlloc ? Number(myAlloc.shareAmount ?? myAlloc.amount ?? 0) : 0;
+            const isUserParticipant = (item.participantMemberIds && item.participantMemberIds.includes(currentMemberId)) || Boolean(myAlloc);
             const Icon = categoryIcons[item.category] || categoryIcons.other;
 
             return (
@@ -381,6 +382,10 @@ export default function ExpensesView({
                   ) : myAlloc && myShareAmount > 0 ? (
                     <div className="text-xs text-indigo-600 font-semibold font-mono">
                       Your share: ₹{myShareAmount.toLocaleString()}
+                    </div>
+                  ) : isUserParticipant ? (
+                    <div className="text-xs text-indigo-600 font-semibold font-mono">
+                      Participating (₹0 share)
                     </div>
                   ) : (
                     <div className="text-xs text-slate-400">Did not participate</div>

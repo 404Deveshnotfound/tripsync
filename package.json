@@ -15,6 +15,7 @@
     "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.1",
     "idb-keyval": "^6.2.1",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.446.0",
     "next": "^14.2.15",
     "qrcode.react": "^4.0.1",

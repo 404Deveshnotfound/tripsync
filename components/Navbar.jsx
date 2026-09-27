@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { mockUsers } from '@/lib/mockStore';
 import CompleteProfileModal from '@/components/CompleteProfileModal';
-import { Plane, Users, Wifi, WifiOff, LogOut, Shield, Compass, Sparkles, RotateCcw, QrCode } from 'lucide-react';
+import { Users, Wifi, WifiOff, LogOut, Shield, Compass, Sparkles, RotateCcw, QrCode } from 'lucide-react';
 
 export default function Navbar() {
   const { user, profile, isMockMode, signOut, switchMockUser } = useAuth();
@@ -37,20 +37,20 @@ export default function Navbar() {
   }, [user, profile]);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+    <header className="sticky top-0 z-50 bg-[#050505]/95 backdrop-blur border-b border-[#272526]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition">
-            <Plane className="w-5 h-5 -rotate-45" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#a91f24] to-[#4b090c] flex items-center justify-center text-white shadow-md shadow-[#9d1117]/20 group-hover:scale-105 transition border border-[#6c1b1f]">
+            <span className="font-serif font-bold text-base">TS</span>
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-xl text-slate-900 tracking-tight">TripSync</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 uppercase tracking-wide">Ledger</span>
+              <span className="font-bold text-xl text-[#f2eee5] tracking-tight">TripSync</span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#9d1117]/15 text-[#d8c49d] uppercase tracking-wide">Ledger</span>
             </div>
-            <p className="text-[11px] text-slate-500 hidden sm:block">Living Verified Travel Ledger</p>
+            <p className="text-[11px] text-[#9c9791] hidden sm:block">Living Verified Travel Ledger</p>
           </div>
         </Link>
 
@@ -60,8 +60,8 @@ export default function Navbar() {
           {/* Network Indicator */}
           <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
             isOnline 
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-              : 'bg-amber-50 text-amber-700 border-amber-200 animate-pulse'
+              ? 'bg-emerald-900/20 text-emerald-400 border-emerald-700/30' 
+              : 'bg-amber-900/20 text-amber-300 border-amber-700/30 animate-pulse'
           }`}>
             {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
             <span className="hidden md:inline">{isOnline ? 'Online' : 'Offline Mode'}</span>
@@ -69,15 +69,15 @@ export default function Navbar() {
 
           {/* Mock Demo Role Switcher for Hackathon Testing */}
           {isMockMode && user && (
-            <div className="hidden lg:flex items-center gap-1.5 bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
-              <span className="text-slate-500 font-medium px-2 flex items-center gap-1">
-                <Shield className="w-3 h-3 text-indigo-600" />
+            <div className="hidden lg:flex items-center gap-1.5 bg-[#151516] p-1 rounded-lg border border-[#272526] text-xs">
+              <span className="text-[#9c9791] font-medium px-2 flex items-center gap-1">
+                <Shield className="w-3 h-3 text-[#d8c49d]" />
                 Role:
               </span>
               <select
                 value={user.id}
                 onChange={(e) => switchMockUser(e.target.value)}
-                className="bg-white border border-slate-200 rounded px-2 py-0.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                className="bg-[#0a0a0b] border border-[#272526] rounded px-2 py-0.5 text-xs font-semibold text-[#f2eee5] focus:outline-none focus:ring-1 focus:ring-[#9d1117] cursor-pointer"
               >
                 {mockUsers.map((u) => (
                   <option key={u.id} value={u.id}>
@@ -99,10 +99,10 @@ export default function Navbar() {
                   console.error(e);
                 }
               }}
-              className="hidden xl:flex items-center gap-1 px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-lg text-xs font-semibold transition"
+              className="hidden xl:flex items-center gap-1 px-2.5 py-1 bg-amber-900/20 hover:bg-amber-900/30 text-amber-300 border border-amber-700/30 rounded-lg text-xs font-semibold transition"
               title="Reset all demo trips, expenses, and balances to default pristine state"
             >
-              <RotateCcw className="w-3 h-3 text-amber-600" />
+              <RotateCcw className="w-3 h-3 text-amber-400" />
               <span>Reset Demo</span>
             </button>
           )}
@@ -114,28 +114,28 @@ export default function Navbar() {
               {(!profile?.upi_id || profile.upi_id.trim() === '') && (
                 <button
                   onClick={() => setIsProfileModalOpen(true)}
-                  className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-lg text-xs font-bold transition flex items-center gap-1.5 animate-pulse"
+                  className="px-2.5 py-1 bg-amber-900/20 hover:bg-amber-900/30 text-amber-300 border border-amber-700/40 rounded-lg text-xs font-bold transition flex items-center gap-1.5 animate-pulse"
                   title="Link your UPI ID to receive settlements"
                 >
-                  <QrCode className="w-3.5 h-3.5 text-amber-600" />
+                  <QrCode className="w-3.5 h-3.5 text-amber-400" />
                   <span className="hidden sm:inline">Link UPI</span>
                 </button>
               )}
 
               <button
                 onClick={() => setIsProfileModalOpen(true)}
-                className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 transition group text-left"
+                className="flex items-center gap-2 p-1 rounded-xl hover:bg-[#1d1b1c] transition group text-left"
                 title="Click to edit profile & UPI ID"
               >
                 <div className="hidden sm:block text-right">
-                  <div className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition">
+                  <div className="text-xs font-bold text-[#f2eee5] group-hover:text-[#d8c49d] transition">
                     {profile?.full_name || user.email}
                   </div>
-                  <div className="text-[10px] text-slate-500 font-mono">
+                  <div className="text-[10px] text-[#9c9791] font-mono">
                     {profile?.upi_id || 'No UPI ID'}
                   </div>
                 </div>
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-bold flex items-center justify-center text-sm shadow">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#a91f24] to-[#4b090c] text-white font-bold flex items-center justify-center text-sm shadow">
                   {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                 </div>
               </button>
@@ -143,7 +143,7 @@ export default function Navbar() {
               <button
                 onClick={signOut}
                 title="Sign Out"
-                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                className="p-2 text-[#9c9791] hover:text-[#e18a8a] hover:bg-rose-900/20 rounded-lg transition"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -152,13 +152,13 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-indigo-600 transition"
+                className="px-3 py-1.5 text-xs font-semibold text-[#9c9791] hover:text-[#d8c49d] transition"
               >
                 Log In
               </Link>
               <Link
                 href="/signup"
-                className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition"
+                className="px-3 py-1.5 text-xs font-semibold text-white bg-[#9d1117] hover:bg-[#7a0d12] rounded-lg shadow-sm shadow-[#9d1117]/20 transition"
               >
                 Sign Up
               </Link>

@@ -251,18 +251,18 @@ export default function TripOverviewPage() {
   if (loading) {
     return (
       <div className="space-y-6 animate-pulse">
-        <div className="h-40 bg-slate-200 rounded-3xl" />
-        <div className="h-64 bg-slate-200 rounded-2xl" />
+        <div className="h-40 bg-[#1d1b1c] rounded-3xl" />
+        <div className="h-64 bg-[#1d1b1c] rounded-2xl" />
       </div>
     );
   }
 
   if (!trip) {
     return (
-      <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 p-8">
-        <h2 className="text-xl font-bold text-slate-800">Trip Not Found</h2>
-        <p className="text-xs text-slate-500 mt-1 mb-6">The requested trip ledger does not exist or has been archived.</p>
-        <Link href="/" className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold">
+      <div className="text-center py-20 bg-[#101011] rounded-2xl border border-[#272526] p-8">
+        <h2 className="text-xl font-bold text-[#f2eee5]">Trip Not Found</h2>
+        <p className="text-xs text-[#9c9791] mt-1 mb-6">The requested trip ledger does not exist or has been archived.</p>
+        <Link href="/" className="px-4 py-2 bg-[#9d1117] text-white rounded-lg text-xs font-semibold">
           Return to Dashboard
         </Link>
       </div>
@@ -283,7 +283,7 @@ export default function TripOverviewPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-indigo-600 transition"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9c9791] hover:text-[#d8c49d] transition"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to All Trips
@@ -291,20 +291,20 @@ export default function TripOverviewPage() {
 
         {/* Invite Code Quick Copy */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-xl shadow-sm text-xs">
-            <span className="text-slate-400 font-medium">Invite Code:</span>
-            <span className="font-mono font-bold text-slate-900">{trip.invite_code}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-[#101011] border border-[#272526] rounded-xl shadow-sm text-xs">
+            <span className="text-[#9c9791] font-medium">Invite Code:</span>
+            <span className="font-mono font-bold text-[#f2eee5]">{trip.invite_code}</span>
             <button
               onClick={copyInviteCode}
-              className="p-1 text-slate-400 hover:text-indigo-600 rounded transition"
+              className="p-1 text-[#9c9791] hover:text-[#d8c49d] rounded transition"
               title="Copy invite code"
             >
-              {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedCode ? <Check className="w-3.5 h-3.5 text-[#a8c49b]" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
           <button
             onClick={copyInviteLink}
-            className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs rounded-xl border border-indigo-200 transition flex items-center gap-1.5"
+            className="px-3 py-1.5 bg-[#9d1117]/10 hover:bg-[#9d1117]/15 text-[#d8c49d] font-semibold text-xs rounded-xl border border-[#9d1117]/30 transition flex items-center gap-1.5"
           >
             <Share2 className="w-3.5 h-3.5" />
             {copiedLink ? 'Link Copied!' : 'Share Link'}
@@ -313,7 +313,7 @@ export default function TripOverviewPage() {
       </div>
 
       {/* Hero Trip Header Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+      <div className="bg-[#101011] rounded-3xl p-6 sm:p-8 border border-[#272526] shadow-sm relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             
@@ -321,46 +321,46 @@ export default function TripOverviewPage() {
             <div className="flex flex-wrap items-center gap-2">
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
                 isManagerTrip 
-                  ? 'bg-indigo-50 text-indigo-700 border-indigo-200' 
-                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  ? 'bg-[#9d1117]/10 text-[#d8c49d] border-[#9d1117]/30' 
+                  : 'bg-emerald-900/20 text-emerald-400 border-emerald-700/30'
               }`}>
                 {isManagerTrip ? <ShieldCheck className="w-3.5 h-3.5" /> : <Users className="w-3.5 h-3.5" />}
                 {isManagerTrip ? 'Manager-Based Trip' : 'Democratic (Group-Managed)'}
               </span>
 
-              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 capitalize">
+              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#151516] text-[#d8c49d] capitalize">
                 Status: {trip.status}
               </span>
 
               {myRole && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 capitalize">
+                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-900/20 text-amber-300 border border-amber-700/30 capitalize">
                   Your Role: {myRole}
                 </span>
               )}
             </div>
 
             {/* Title & Metadata */}
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#f2eee5] tracking-tight">
               {trip.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-[#9c9791]">
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-slate-400" />
+                <MapPin className="w-4 h-4 text-[#9c9791]" />
                 <span className="font-semibold">{trip.destination}</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-slate-400" />
+                <Calendar className="w-4 h-4 text-[#9c9791]" />
                 <span>{trip.start_date} &rarr; {trip.end_date}</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-slate-400" />
+                <Users className="w-4 h-4 text-[#9c9791]" />
                 <span>{members.filter(m => m.status === 'active').length} Active Travelers</span>
               </div>
             </div>
 
             {trip.description && (
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-1">
+              <p className="text-xs sm:text-sm text-[#9c9791] leading-relaxed pt-1">
                 {trip.description}
               </p>
             )}
@@ -370,7 +370,7 @@ export default function TripOverviewPage() {
               <div className="pt-2">
                 <button
                   onClick={() => setIsLeaveModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-xl border border-rose-200 transition shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-900/20 hover:bg-[#a91f24] text-rose-400 text-xs font-semibold rounded-xl border border-rose-700/30 transition shadow-sm"
                   title="Leave this trip early and trigger automatic cost recalculation"
                 >
                   <LogOut className="w-3.5 h-3.5" />
@@ -380,8 +380,8 @@ export default function TripOverviewPage() {
             )}
             {myMember && (myMember.status === 'left' || myMember.status === 'removed') && (
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-xl border border-slate-200">
-                  <LogOut className="w-3.5 h-3.5 text-slate-400" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#151516] text-[#9c9791] text-xs font-semibold rounded-xl border border-[#272526]">
+                  <LogOut className="w-3.5 h-3.5 text-[#9c9791]" />
                   {myMember.status === 'left' ? 'You have left this trip' : 'You were removed from this trip'}
                 </span>
               </div>
@@ -390,17 +390,17 @@ export default function TripOverviewPage() {
           </div>
 
           {/* Quick Ledger Snapshot Box */}
-          <div className="w-full md:w-72 bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl p-5 shadow-sm space-y-3 shrink-0">
-            <span className="text-[11px] text-indigo-300 font-semibold uppercase tracking-wider block">
+          <div className="w-full md:w-72 bg-gradient-to-br from-[#1a090a] to-[#0d0b0c] text-white rounded-2xl p-5 shadow-sm space-y-3 shrink-0">
+            <span className="text-[11px] text-[#d8c49d] font-semibold uppercase tracking-wider block">
               Trip Ledger Snapshot
             </span>
             <div>
-              <div className="text-xs text-slate-400">Total Group Spend:</div>
+              <div className="text-xs text-[#9c9791]">Total Group Spend:</div>
               <div className="text-2xl font-black font-mono">
                 ₹{Number(ledger?.totalTripCost || 0).toLocaleString()}
               </div>
             </div>
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
+            <div className="pt-2 border-t border-white/5 flex items-center justify-between text-xs text-[#9c9791]">
               <span>Bookings: <strong>{bookings.length}</strong></span>
               <span>Transfers: <strong>{settlementTransfers.length}</strong></span>
             </div>
@@ -409,7 +409,7 @@ export default function TripOverviewPage() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="mt-8 pt-4 border-t border-slate-100 flex items-center gap-2 overflow-x-auto">
+        <div className="mt-8 pt-4 border-t border-[#1d1b1c] flex items-center gap-2 overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview & Members', icon: Users },
             { id: 'digital-twin', label: 'Weather Digital Twin 🌪️', icon: CloudRain, highlight: true },
@@ -429,12 +429,12 @@ export default function TripOverviewPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-200'
+                    ? 'bg-[#9d1117] text-white shadow-sm shadow-[#9d1117]/20'
                     : tab.highlight
-                    ? 'bg-gradient-to-r from-purple-50 to-indigo-50 text-indigo-700 border border-indigo-300 font-bold hover:from-purple-100 hover:to-indigo-100 shadow-sm'
+                    ? 'bg-gradient-to-r from-[#9d1117]/10 to-[#d8c49d]/5 text-[#d8c49d] border border-[#9d1117]/40 font-bold hover:from-[#9d1117]/15 hover:to-[#d8c49d]/10 shadow-sm'
                     : tab.alert
-                    ? 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    ? 'bg-amber-900/20 text-amber-300 border border-amber-700/30 hover:bg-amber-900/30'
+                    : 'text-[#9c9791] hover:text-[#f2eee5] hover:bg-[#151516]'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -449,22 +449,22 @@ export default function TripOverviewPage() {
       {/* Tab 1: Overview & Members */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+          <div className="bg-[#101011] rounded-2xl border border-[#272526] p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-slate-900">Trip Participants & Balances</h3>
-                <p className="text-xs text-slate-500">Live balance breakdown per participant</p>
+                <h3 className="text-base font-bold text-[#f2eee5]">Trip Participants & Balances</h3>
+                <p className="text-xs text-[#9c9791]">Live balance breakdown per participant</p>
               </div>
               <button
                 onClick={copyInviteCode}
-                className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+                className="px-3 py-1.5 bg-[#9d1117]/10 hover:bg-[#9d1117]/15 text-[#d8c49d] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 Invite Friend
               </button>
             </div>
 
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#1d1b1c]">
               {members.map((member) => {
                 const summary = ledger?.memberSummaries?.find(s => s.memberId === member.id);
                 const isCurrent = member.user_id === user?.id;
@@ -473,20 +473,20 @@ export default function TripOverviewPage() {
                   <div key={member.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-700 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#a91f24] to-[#4b090c] text-white font-bold flex items-center justify-center text-sm shadow-sm">
                         {member.display_name?.charAt(0) || 'T'}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-slate-900">{member.display_name}</span>
+                          <span className="text-sm font-bold text-[#f2eee5]">{member.display_name}</span>
                           {isCurrent && (
-                            <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-semibold">You</span>
+                            <span className="text-[10px] bg-[#151516] text-[#9c9791] px-1.5 py-0.2 rounded font-semibold">You</span>
                           )}
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded border capitalize bg-slate-50 border-slate-200 text-slate-700">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded border capitalize bg-[#050505] border-[#272526] text-[#d8c49d]">
                             {member.role}
                           </span>
                         </div>
-                        <div className="text-xs text-slate-500 font-mono">
+                        <div className="text-xs text-[#9c9791] font-mono">
                           UPI: {member.upi_id || 'Not linked'} &bull; {summary?.participatingBookingsCount || 0} active activities
                         </div>
                       </div>
@@ -498,29 +498,29 @@ export default function TripOverviewPage() {
                         {summary ? (
                           <div>
                             <div className={`text-sm font-black font-mono ${
-                              summary.isCreditor ? 'text-emerald-600' :
-                              summary.isDebtor ? 'text-rose-600' :
-                              'text-slate-600'
+                              summary.isCreditor ? 'text-emerald-400' :
+                              summary.isDebtor ? 'text-[#e18a8a]' :
+                              'text-[#9c9791]'
                             }`}>
                               {summary.isCreditor ? `+₹${Number(summary.netBalance || 0).toLocaleString()}` :
                                summary.isDebtor ? `-₹${Number(Math.abs(summary.netBalance || 0)).toLocaleString()}` :
                                '₹0.00'}
                             </div>
-                            <div className="text-[10px] text-slate-400">
+                            <div className="text-[10px] text-[#9c9791]">
                               Paid: ₹{Number(summary.totalPaid || 0).toLocaleString()} | Share: ₹{Number(summary.totalShare || 0).toLocaleString()}
                             </div>
                           </div>
                         ) : (
-                          <div className="text-xs text-slate-400">No transactions</div>
+                          <div className="text-xs text-[#9c9791]">No transactions</div>
                         )}
                       </div>
 
                       <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                         member.status === 'active' 
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                          ? 'bg-emerald-900/20 text-emerald-400 border border-emerald-700/30' 
                           : member.status === 'removed'
-                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                          : 'bg-rose-50 text-rose-700 border border-rose-200'
+                          ? 'bg-amber-900/20 text-amber-300 border border-amber-700/30'
+                          : 'bg-rose-900/20 text-rose-400 border border-rose-700/30'
                       }`}>
                         {member.status === 'active' ? '● Active' : member.status === 'removed' ? '○ Removed' : '○ Left Trip'}
                       </span>
@@ -532,7 +532,7 @@ export default function TripOverviewPage() {
                             setMemberToRemove(member);
                             setRemoveReason('');
                           }}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                          className="p-1.5 text-[#9c9791] hover:text-[#e18a8a] hover:bg-rose-900/20 rounded-lg transition"
                           title={`Remove ${member.display_name} from trip (triggers cost recalculation)`}
                         >
                           <UserMinus className="w-4 h-4 text-rose-500" />
@@ -658,10 +658,10 @@ export default function TripOverviewPage() {
       {/* Floating AI Finance Copilot Trigger */}
       <button
         onClick={() => setIsAiAssistantOpen(true)}
-        className="fixed bottom-6 right-6 z-40 px-4 py-3 bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-full shadow-2xl shadow-indigo-600/40 flex items-center gap-2.5 font-bold text-xs tracking-wide transition-all transform hover:scale-105 active:scale-95 border border-indigo-300/30"
+        className="fixed bottom-6 right-6 z-40 px-4 py-3 bg-gradient-to-r from-[#9d1117] via-[#7a0d12] to-[#4b090c] hover:from-[#d42a2f] hover:to-violet-500 text-white rounded-full shadow-2xl shadow-[#9d1117]/40 flex items-center gap-2.5 font-bold text-xs tracking-wide transition-all transform hover:scale-105 active:scale-95 border border-indigo-300/30"
         title="Ask AI Finance Copilot"
       >
-        <Bot className="w-5 h-5 text-indigo-200" />
+        <Bot className="w-5 h-5 text-[#d8c49d]" />
         <span className="font-semibold">Ask AI Copilot</span>
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
       </button>
@@ -715,16 +715,16 @@ export default function TripOverviewPage() {
 
       {/* Leave Trip Confirmation Modal */}
       {isLeaveModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-rose-600 font-bold text-base">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/72 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#101011] w-full max-w-md rounded-2xl shadow-2xl border border-[#272526] p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1d1b1c]">
+              <div className="flex items-center gap-2 text-[#e18a8a] font-bold text-base">
                 <LogOut className="w-5 h-5" />
                 <span>Leave Trip</span>
               </div>
               <button
                 onClick={() => setIsLeaveModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                className="p-1 rounded-lg text-[#9c9791] hover:text-[#9c9791] hover:bg-[#151516] transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -737,25 +737,25 @@ export default function TripOverviewPage() {
               const myNetBalance = Number(mySummary?.netBalance || 0);
 
               return (
-                <div className="space-y-3 text-xs text-slate-600 leading-relaxed">
+                <div className="space-y-3 text-xs text-[#9c9791] leading-relaxed">
                   <p>
                     Are you sure you want to leave <strong>{trip?.title}</strong>?
                   </p>
-                  <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-950 space-y-2">
-                    <span className="font-bold flex items-center gap-1.5 text-amber-800 text-xs">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <div className="p-3.5 bg-amber-900/20 border border-amber-700/30 rounded-xl text-amber-950 space-y-2">
+                    <span className="font-bold flex items-center gap-1.5 text-amber-300 text-xs">
+                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
                       Pre-Decided Share Obligation &amp; No-Loss Policy
                     </span>
-                    <p className="text-[11px] text-amber-900 leading-relaxed">
+                    <p className="text-[11px] text-amber-300 leading-relaxed">
                       All predecided amounts for itineraries and shared expenses already booked or paid remain your financial liability. Remaining travelers will <strong>not</strong> incur an unfair loss or absorb your share.
                     </p>
-                    <div className="pt-2 border-t border-amber-200/80 flex items-center justify-between text-xs font-semibold">
-                      <span className="text-amber-800">Your Locked Pre-Committed Share:</span>
-                      <span className="font-mono text-rose-700 font-bold text-sm">₹{myCommittedShare.toLocaleString()}</span>
+                    <div className="pt-2 border-t border-amber-700/30 flex items-center justify-between text-xs font-semibold">
+                      <span className="text-amber-300">Your Locked Pre-Committed Share:</span>
+                      <span className="font-mono text-rose-400 font-bold text-sm">₹{myCommittedShare.toLocaleString()}</span>
                     </div>
                     {myNetBalance < 0 && (
-                      <div className="text-[11px] text-rose-800 font-medium bg-rose-50 p-2.5 rounded-lg border border-rose-200 flex items-start gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5 text-rose-600 mt-0.5 shrink-0" />
+                      <div className="text-[11px] text-rose-400 font-medium bg-rose-900/20 p-2.5 rounded-lg border border-rose-700/30 flex items-start gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-[#e18a8a] mt-0.5 shrink-0" />
                         <span>
                           You currently have an outstanding balance of <strong>₹{Math.abs(myNetBalance).toLocaleString()}</strong>. This amount remains an active debt payable by you to the payer(s) via UPI.
                         </span>
@@ -767,7 +767,7 @@ export default function TripOverviewPage() {
             })()}
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">
                 Reason for Leaving (Optional)
               </label>
               <input
@@ -775,16 +775,16 @@ export default function TripOverviewPage() {
                 placeholder="e.g. Flight booked early / Emergency"
                 value={leaveReason}
                 onChange={(e) => setLeaveReason(e.target.value)}
-                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-3 py-2 text-xs border border-[#272526] bg-[#050505] text-[#f2eee5] rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1d1b1c]">
               <button
                 type="button"
                 onClick={() => setIsLeaveModalOpen(false)}
                 disabled={isLeaveLoading}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+                className="px-4 py-2 text-xs font-semibold text-[#9c9791] hover:bg-[#151516] rounded-xl transition"
               >
                 Cancel
               </button>
@@ -792,7 +792,7 @@ export default function TripOverviewPage() {
                 type="button"
                 onClick={handleConfirmLeave}
                 disabled={isLeaveLoading}
-                className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-md shadow-rose-600/20 transition disabled:opacity-50 flex items-center gap-1.5"
+                className="px-4 py-2 text-xs font-bold text-white bg-[#d42a2f] hover:bg-[#a91f24] rounded-xl shadow-md shadow-[#9d1117]/20 transition disabled:opacity-50 flex items-center gap-1.5"
               >
                 {isLeaveLoading ? 'Recalculating...' : 'Confirm & Leave'}
               </button>
@@ -803,16 +803,16 @@ export default function TripOverviewPage() {
 
       {/* Remove Participant Modal (Manager / Owner) */}
       {memberToRemove && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-rose-600 font-bold text-base">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/72 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#101011] w-full max-w-md rounded-2xl shadow-2xl border border-[#272526] p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1d1b1c]">
+              <div className="flex items-center gap-2 text-[#e18a8a] font-bold text-base">
                 <UserMinus className="w-5 h-5" />
                 <span>Remove Participant</span>
               </div>
               <button
                 onClick={() => setMemberToRemove(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                className="p-1 rounded-lg text-[#9c9791] hover:text-[#9c9791] hover:bg-[#151516] transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -825,25 +825,25 @@ export default function TripOverviewPage() {
               const removeNetBalance = Number(removeSummary?.netBalance || 0);
 
               return (
-                <div className="space-y-3 text-xs text-slate-600 leading-relaxed">
+                <div className="space-y-3 text-xs text-[#9c9791] leading-relaxed">
                   <p>
                     Are you sure you want to remove <strong>{memberToRemove.display_name}</strong> from this trip?
                   </p>
-                  <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-950 space-y-2">
-                    <span className="font-bold flex items-center gap-1.5 text-amber-800 text-xs">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <div className="p-3.5 bg-amber-900/20 border border-amber-700/30 rounded-xl text-amber-950 space-y-2">
+                    <span className="font-bold flex items-center gap-1.5 text-amber-300 text-xs">
+                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
                       Pre-Committed Share Locked (Remaining Travelers Protected)
                     </span>
-                    <p className="text-[11px] text-amber-900 leading-relaxed">
+                    <p className="text-[11px] text-amber-300 leading-relaxed">
                       In accordance with the fair split policy, removing this participant will <strong>not</strong> impose extra costs or losses on the remaining travelers. Their predecided share for already booked itineraries remains locked as their payable liability.
                     </p>
-                    <div className="pt-2 border-t border-amber-200/80 flex items-center justify-between text-xs font-semibold">
-                      <span className="text-amber-800">Their Locked Share Obligation:</span>
-                      <span className="font-mono text-rose-700 font-bold text-sm">₹{removeCommittedShare.toLocaleString()}</span>
+                    <div className="pt-2 border-t border-amber-700/30 flex items-center justify-between text-xs font-semibold">
+                      <span className="text-amber-300">Their Locked Share Obligation:</span>
+                      <span className="font-mono text-rose-400 font-bold text-sm">₹{removeCommittedShare.toLocaleString()}</span>
                     </div>
                     {removeNetBalance < 0 && (
-                      <div className="text-[11px] text-amber-900 font-medium bg-amber-100/60 p-2.5 rounded-lg border border-amber-300 flex items-start gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-700 mt-0.5 shrink-0" />
+                      <div className="text-[11px] text-amber-300 font-medium bg-amber-900/25 p-2.5 rounded-lg border border-amber-700/30 flex items-start gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-400 mt-0.5 shrink-0" />
                         <span>
                           Outstanding debt due: <strong>₹{Math.abs(removeNetBalance).toLocaleString()}</strong> remains recorded in the settlement ledger and payable by {memberToRemove.display_name}.
                         </span>
@@ -855,7 +855,7 @@ export default function TripOverviewPage() {
             })()}
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">
                 Reason for Removal (Optional)
               </label>
               <input
@@ -863,16 +863,16 @@ export default function TripOverviewPage() {
                 placeholder="e.g. Cancelled attendance / Disputed terms"
                 value={removeReason}
                 onChange={(e) => setRemoveReason(e.target.value)}
-                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-3 py-2 text-xs border border-[#272526] bg-[#050505] text-[#f2eee5] rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1d1b1c]">
               <button
                 type="button"
                 onClick={() => setMemberToRemove(null)}
                 disabled={isRemoveLoading}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+                className="px-4 py-2 text-xs font-semibold text-[#9c9791] hover:bg-[#151516] rounded-xl transition"
               >
                 Cancel
               </button>
@@ -880,7 +880,7 @@ export default function TripOverviewPage() {
                 type="button"
                 onClick={handleConfirmRemove}
                 disabled={isRemoveLoading}
-                className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-md shadow-rose-600/20 transition disabled:opacity-50 flex items-center gap-1.5"
+                className="px-4 py-2 text-xs font-bold text-white bg-[#d42a2f] hover:bg-[#a91f24] rounded-xl shadow-md shadow-[#9d1117]/20 transition disabled:opacity-50 flex items-center gap-1.5"
               >
                 {isRemoveLoading ? 'Recalculating...' : 'Remove & Recalculate'}
               </button>

@@ -60,23 +60,23 @@ export default function CompleteProfileModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/72 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-[#101011] w-full max-w-md rounded-3xl shadow-2xl border border-[#272526] overflow-hidden">
         
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-indigo-50 to-slate-50">
+        <div className="px-6 py-5 border-b border-[#1d1b1c] flex items-center justify-between bg-gradient-to-r from-[#0d0b0c] to-[#0a0a0b]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200">
+            <div className="w-9 h-9 rounded-xl bg-[#9d1117] text-[#f2eee5] flex items-center justify-center shadow-md shadow-[#9d1117]/20">
               <QrCode className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">Link Settlement UPI ID</h2>
-              <p className="text-[11px] text-slate-500">Enable automatic UPI settlement payouts</p>
+              <h2 className="text-base font-bold text-[#f2eee5]">Link Settlement UPI ID</h2>
+              <p className="text-[11px] text-[#9c9791]">Enable automatic UPI settlement payouts</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-[#9c9791] hover:text-[#f2eee5] hover:bg-[#151516] transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -85,71 +85,71 @@ export default function CompleteProfileModal({ isOpen, onClose }) {
         <form onSubmit={handleSave} className="p-6 space-y-4">
           
           {/* Welcome Info Box */}
-          <div className="p-3 rounded-2xl bg-indigo-50/70 border border-indigo-100 text-xs text-indigo-900 flex items-start gap-2.5">
-            <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+          <div className="p-3 rounded-2xl bg-[#9d1117]/12 border border-[#9d1117]/20 text-xs text-[#d8c49d] flex items-start gap-2.5">
+            <Sparkles className="w-4 h-4 text-[#d8c49d] shrink-0 mt-0.5" />
             <div>
               <span className="font-bold">Why is this needed?</span>
-              <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
+              <p className="text-[#9c9791] text-[11px] mt-0.5 leading-relaxed">
                 TripSync uses your UPI ID to generate dynamic QR codes and deep links so friends can pay their split shares directly to you with zero commission.
               </p>
             </div>
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium">
+            <div className="p-3 rounded-xl bg-rose-900/20 border border-rose-700/30 text-xs text-rose-400 font-medium">
               {error}
             </div>
           )}
 
           {savedSuccess && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 font-medium flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600" />
+            <div className="p-3 rounded-xl bg-emerald-900/20 border border-emerald-700/30 text-xs text-emerald-400 font-medium flex items-center gap-2">
+              <Check className="w-4 h-4 text-[#a8c49b]" />
               <span>UPI ID saved successfully!</span>
             </div>
           )}
 
           {/* Full Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Display Name</label>
+            <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Display Name</label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <User className="w-4 h-4 text-[#9c9791] absolute left-3 top-3" />
               <input
                 type="text"
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Rahul Sharma"
-                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               />
             </div>
           </div>
 
           {/* UPI ID */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-[#d8c49d] mb-1">
               Your UPI ID <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
-              <QrCode className="w-4 h-4 text-indigo-500 absolute left-3 top-3" />
+              <QrCode className="w-4 h-4 text-[#d42a2f] absolute left-3 top-3" />
               <input
                 type="text"
                 required
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
                 placeholder="name@oksbi or 9876543210@paytm"
-                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9d1117] font-mono"
               />
             </div>
             
             {/* Quick Handle Suggestions */}
             <div className="flex flex-wrap items-center gap-1.5 mt-2">
-              <span className="text-[10px] text-slate-400 font-medium">Quick handles:</span>
+              <span className="text-[10px] text-[#9c9791] font-medium">Quick handles:</span>
               {popularUpiHandles.map((handle) => (
                 <button
                   type="button"
                   key={handle}
                   onClick={() => handleApplyHandle(handle)}
-                  className="px-2 py-0.5 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 rounded-md text-[10px] font-mono font-medium transition"
+                  className="px-2 py-0.5 bg-[#151516] hover:bg-[#9d1117]/10 hover:text-[#d8c49d] text-[#9c9791] rounded-md text-[10px] font-mono font-medium transition"
                 >
                   {handle}
                 </button>
@@ -159,17 +159,17 @@ export default function CompleteProfileModal({ isOpen, onClose }) {
 
           {/* Phone Number (Optional) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Phone Number <span className="text-slate-400 font-normal">(Optional, for trip updates)</span>
+            <label className="block text-xs font-semibold text-[#d8c49d] mb-1">
+              Phone Number <span className="text-[#9c9791] font-normal">(Optional, for trip updates)</span>
             </label>
             <div className="relative">
-              <Smartphone className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <Smartphone className="w-4 h-4 text-[#9c9791] absolute left-3 top-3" />
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               />
             </div>
           </div>
@@ -179,14 +179,14 @@ export default function CompleteProfileModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
+              className="px-4 py-2 text-xs font-semibold text-[#9c9791] hover:text-[#f2eee5] transition"
             >
               Skip for now
             </button>
             <button
               type="submit"
               disabled={loading || savedSuccess}
-              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-md shadow-indigo-200 transition flex items-center gap-1.5 disabled:opacity-50"
+              className="px-5 py-2.5 bg-[#9d1117] hover:bg-[#7a0d12] text-[#f2eee5] font-semibold text-xs rounded-xl shadow-md shadow-[#9d1117]/20 transition flex items-center gap-1.5 disabled:opacity-50"
             >
               {loading ? (
                 <span>Saving...</span>

@@ -197,29 +197,29 @@ export default function AddExpenseModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/72 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-[#101011] w-full max-w-lg rounded-2xl shadow-2xl border border-[#272526] overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+        <div className="px-6 py-4 border-b border-[#1d1b1c] flex items-center justify-between bg-[#0a0a0b] shrink-0">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Record Expense & Booking</h2>
-            <p className="text-xs text-slate-500">Group meals, stays, flights, cabs, or activities</p>
+            <h2 className="text-lg font-bold text-[#f2eee5]">Record Expense & Booking</h2>
+            <p className="text-xs text-[#9c9791]">Group meals, stays, flights, cabs, or activities</p>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition">
+          <button onClick={onClose} className="p-1.5 rounded-lg text-[#9c9791] hover:text-[#f2eee5] hover:bg-[#151516] transition">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {initialData && (
-          <div className="mx-6 mt-3 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-1.5 font-medium shrink-0">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <div className="mx-6 mt-3 px-3 py-1.5 bg-emerald-900/20 border border-emerald-700/30 rounded-xl text-xs text-emerald-400 flex items-center gap-1.5 font-medium shrink-0">
+            <Sparkles className="w-3.5 h-3.5 text-[#a8c49b] shrink-0" />
             <span>Autofilled from your AI Natural Language Prompt!</span>
           </div>
         )}
 
         {error && (
-          <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 shrink-0">
+          <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-900/20 border border-rose-700/30 text-xs text-rose-400 shrink-0">
             {error}
           </div>
         )}
@@ -229,23 +229,23 @@ export default function AddExpenseModal({
           {/* Title & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Expense Description</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Expense Description</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Seafood Dinner or Highway Toll"
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Category</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               >
                 <option value="meal">🍽️ Food & Meals</option>
                 <option value="hotel">🏨 Hotel / Stay</option>
@@ -264,9 +264,9 @@ export default function AddExpenseModal({
           {/* Amount & Paid By */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Amount (₹ INR)</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Amount (₹ INR)</label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-sm font-bold text-slate-400">₹</span>
+                <span className="absolute left-3 top-2.5 text-sm font-bold text-[#9c9791]">₹</span>
                 <input
                   type="number"
                   step="0.01"
@@ -274,17 +274,17 @@ export default function AddExpenseModal({
                   value={totalAmount}
                   onChange={(e) => setTotalAmount(e.target.value)}
                   placeholder="3500"
-                  className="w-full pl-8 pr-3 py-2 text-sm font-bold border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-8 pr-3 py-2 text-sm font-bold border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Who Paid?</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Who Paid?</label>
               <select
                 value={paidByMemberId}
                 onChange={(e) => setPaidByMemberId(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               >
                 {members.map(m => (
                   <option key={m.id} value={m.id}>{m.display_name}</option>
@@ -296,13 +296,13 @@ export default function AddExpenseModal({
           {/* Participating Members */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-semibold text-slate-700">
+              <label className="block text-xs font-semibold text-[#d8c49d]">
                 Who is Splitting this? ({selectedMemberIds.length}/{members.filter(m => m.status === 'active').length || members.length})
               </label>
               <button
                 type="button"
                 onClick={selectAll}
-                className="text-[11px] text-indigo-600 font-semibold hover:underline"
+                className="text-[11px] text-[#d8c49d] font-semibold hover:underline"
               >
                 Select All
               </button>
@@ -317,12 +317,12 @@ export default function AddExpenseModal({
                     onClick={() => toggleMember(m.id)}
                     className={`p-2 rounded-xl text-left border text-xs flex items-center justify-between transition ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-bold'
-                        : 'border-slate-200 text-slate-600'
+                        ? 'border-[#9d1117] bg-[#9d1117]/8 text-[#d8c49d] font-bold'
+                        : 'border-[#272526] text-[#9c9791]'
                     }`}
                   >
                     <span className="truncate">{m.display_name.split(' ')[0]}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
+                    {isSelected && <Check className="w-3.5 h-3.5 text-[#d8c49d] shrink-0" />}
                   </button>
                 );
               })}
@@ -330,15 +330,15 @@ export default function AddExpenseModal({
           </div>
 
           {/* Split Method Selector (5-Way Split Engine) */}
-          <div className="space-y-2 pt-1 border-t border-slate-100">
-            <label className="block text-xs font-semibold text-slate-700">
-              Split Method <span className="text-indigo-600 font-normal">(Deterministic Engine)</span>
+          <div className="space-y-2 pt-1 border-t border-[#1d1b1c]">
+            <label className="block text-xs font-semibold text-[#d8c49d]">
+              Split Method <span className="text-[#d8c49d] font-normal">(Deterministic Engine)</span>
             </label>
 
             <select
               value={splitMethod}
               onChange={(e) => setSplitMethod(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+              className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117] font-medium"
             >
               <option value="equal">⚖️ Equal Split (Split evenly among participants)</option>
               <option value="activity_based">🎯 Activity-Based (Only selected travelers share)</option>
@@ -350,8 +350,8 @@ export default function AddExpenseModal({
 
           {/* Custom Percentage / Shares / Exact Inputs */}
           {(splitMethod === 'percentage' || splitMethod === 'shares' || splitMethod === 'exact') && (
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <span className="text-[11px] font-bold text-slate-700 block">
+            <div className="p-3 bg-[#050505] border border-[#272526] rounded-xl space-y-2">
+              <span className="text-[11px] font-bold text-[#d8c49d] block">
                 Assign {splitMethod === 'percentage' ? 'Percentages (%)' : splitMethod === 'shares' ? 'Shares (e.g. 1, 2)' : 'Exact Amounts (₹)'}:
               </span>
               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
@@ -359,17 +359,17 @@ export default function AddExpenseModal({
                   const member = members.find(m => m.id === memId);
                   return (
                     <div key={memId} className="flex items-center justify-between text-xs gap-3">
-                      <span className="text-slate-700 font-medium truncate">{member?.display_name}:</span>
+                      <span className="text-[#d8c49d] font-medium truncate">{member?.display_name}:</span>
                       <div className="flex items-center gap-1">
-                        {splitMethod === 'exact' && <span className="text-slate-400 font-bold">₹</span>}
+                        {splitMethod === 'exact' && <span className="text-[#9c9791] font-bold">₹</span>}
                         <input
                           type="number"
                           placeholder={splitMethod === 'percentage' ? '20' : splitMethod === 'shares' ? '1' : '1000'}
                           value={customMap[memId] || ''}
                           onChange={(e) => handleCustomValueChange(memId, e.target.value)}
-                          className="w-24 px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 text-right font-mono"
+                          className="w-24 px-2 py-1 text-xs border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded focus:outline-none focus:ring-1 focus:ring-[#9d1117] text-right font-mono"
                         />
-                        {splitMethod === 'percentage' && <span className="text-slate-400 font-bold">%</span>}
+                        {splitMethod === 'percentage' && <span className="text-[#9c9791] font-bold">%</span>}
                       </div>
                     </div>
                   );
@@ -379,25 +379,25 @@ export default function AddExpenseModal({
           )}
 
           {/* Optional Travel & Booking Details Accordion */}
-          <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/40">
+          <div className="border border-[#272526] rounded-xl overflow-hidden bg-[#0a0a0b]">
             <button
               type="button"
               onClick={() => setIsBookingDetailsOpen(!isBookingDetailsOpen)}
-              className="w-full px-3.5 py-2.5 flex items-center justify-between text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
+              className="w-full px-3.5 py-2.5 flex items-center justify-between text-xs font-semibold text-[#d8c49d] hover:bg-[#151516] transition"
             >
               <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                <MapPin className="w-3.5 h-3.5 text-[#d8c49d]" />
                 <span>Spot Location & Travel Details (For Map Drop Pins)</span>
-                <span className="text-[10px] text-slate-400 font-normal">(Optional)</span>
+                <span className="text-[10px] text-[#9c9791] font-normal">(Optional)</span>
               </div>
-              {isBookingDetailsOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              {isBookingDetailsOpen ? <ChevronUp className="w-4 h-4 text-[#9c9791]" /> : <ChevronDown className="w-4 h-4 text-[#9c9791]" />}
             </button>
 
             {isBookingDetailsOpen && (
-              <div className="p-3.5 bg-white border-t border-slate-200 space-y-3">
+              <div className="p-3.5 bg-[#101011] border-t border-[#272526] space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center gap-1">
+                    <label className="block text-[11px] font-semibold text-[#9c9791] mb-1 flex items-center gap-1">
                       <MapPin className="w-3 h-3 text-rose-500" />
                       Spot / Venue Location
                     </label>
@@ -406,11 +406,11 @@ export default function AddExpenseModal({
                       value={locationName}
                       onChange={(e) => setLocationName(e.target.value)}
                       placeholder="e.g. Baga Beach or Fisherman's Wharf"
-                      className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full px-3 py-1.5 text-xs border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9d1117]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#9c9791] mb-1">
                       Google Maps Link or Coordinates
                     </label>
                     <input
@@ -418,41 +418,41 @@ export default function AddExpenseModal({
                       value={locationCoords}
                       onChange={(e) => setLocationCoords(e.target.value)}
                       placeholder="e.g. 15.5524, 73.7517 or Maps URL"
-                      className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                      className="w-full px-3 py-1.5 text-xs border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9d1117] font-mono"
                     />
-                    <p className="text-[10px] text-slate-400 mt-0.5">Auto-drops pin on the live trip map.</p>
+                    <p className="text-[10px] text-[#9c9791] mt-0.5">Auto-drops pin on the live trip map.</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#1d1b1c]">
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">Vendor / Booking Platform</label>
+                    <label className="block text-[11px] font-semibold text-[#9c9791] mb-1">Vendor / Booking Platform</label>
                     <input
                       type="text"
                       value={vendorName}
                       onChange={(e) => setVendorName(e.target.value)}
                       placeholder="e.g. MakeMyTrip / Airbnb / IndiGo"
-                      className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full px-3 py-1.5 text-xs border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9d1117]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">Booking Ref / PNR</label>
+                    <label className="block text-[11px] font-semibold text-[#9c9791] mb-1">Booking Ref / PNR</label>
                     <input
                       type="text"
                       value={bookingReference}
                       onChange={(e) => setBookingReference(e.target.value)}
                       placeholder="e.g. PNR-8921 or MMT-RES"
-                      className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                      className="w-full px-3 py-1.5 text-xs border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9d1117] font-mono"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Travel / Activity Date</label>
+                  <label className="block text-[11px] font-semibold text-[#9c9791] mb-1">Travel / Activity Date</label>
                   <input
                     type="date"
                     value={travelDate}
                     onChange={(e) => setTravelDate(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-1.5 text-xs border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9d1117]"
                   />
                 </div>
               </div>
@@ -460,8 +460,8 @@ export default function AddExpenseModal({
           </div>
 
           {/* Verification Evidence */}
-          <div className="space-y-2 pt-1 border-t border-slate-100">
-            <label className="block text-xs font-semibold text-slate-700">
+          <div className="space-y-2 pt-1 border-t border-[#1d1b1c]">
+            <label className="block text-xs font-semibold text-[#d8c49d]">
               Payment Evidence / Verification Mode
             </label>
             
@@ -480,11 +480,11 @@ export default function AddExpenseModal({
                     onClick={() => setProofType(opt.id)}
                     className={`p-2 rounded-xl border text-center transition flex flex-col items-center justify-center gap-1 ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50/60 text-indigo-900 font-bold'
-                        : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                        ? 'border-[#9d1117] bg-[#9d1117]/10 text-[#d8c49d] font-bold'
+                        : 'border-[#272526] text-[#9c9791] hover:border-[#272526]'
                     }`}
                   >
-                    <Icon className="w-4 h-4 text-indigo-600" />
+                    <Icon className="w-4 h-4 text-[#d8c49d]" />
                     <span className="text-[11px]">{opt.label}</span>
                   </button>
                 );
@@ -492,7 +492,7 @@ export default function AddExpenseModal({
             </div>
 
             {(proofType === 'upi_screenshot' || proofType === 'bill_receipt') && (
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 text-xs">
+              <div className="p-3 bg-[#050505] border border-[#272526] rounded-xl space-y-2.5 text-xs">
                 
                 {/* Proof Image Upload & Preview */}
                 <input
@@ -536,31 +536,31 @@ export default function AddExpenseModal({
                 />
 
                 <div className="flex items-center justify-between">
-                  <label className="font-semibold text-slate-700 block">
+                  <label className="font-semibold text-[#d8c49d] block">
                     {proofType === 'upi_screenshot' ? 'Upload Payment Screenshot:' : 'Upload Cash Receipt:'}
                   </label>
                   {proofUrl && (
-                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
-                      <Check className="w-3 h-3 text-emerald-600" />
+                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-900/20 px-2 py-0.5 rounded border border-emerald-700/30 flex items-center gap-1">
+                      <Check className="w-3 h-3 text-[#a8c49b]" />
                       Proof Attached
                     </span>
                   )}
                 </div>
 
                 {proofUrl ? (
-                  <div className="flex items-center gap-3 p-2 bg-white rounded-lg border border-slate-200">
+                  <div className="flex items-center gap-3 p-2 bg-[#101011] rounded-lg border border-[#272526]">
                     <img
                       src={proofUrl}
                       alt="Proof"
-                      className="w-12 h-12 object-cover rounded-md border border-slate-200 shrink-0"
+                      className="w-12 h-12 object-cover rounded-md border border-[#272526] shrink-0"
                     />
                     <div className="flex-1 truncate">
-                      <span className="text-slate-700 font-bold block truncate text-[11px]">Payment Evidence Image</span>
-                      <span className="text-slate-400 text-[10px] block">Attached for verification</span>
+                      <span className="text-[#d8c49d] font-bold block truncate text-[11px]">Payment Evidence Image</span>
+                      <span className="text-[#9c9791] text-[10px] block">Attached for verification</span>
                     </div>
                     <label
                       htmlFor="proof-upload-input"
-                      className="px-2.5 py-1 text-[11px] font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg cursor-pointer transition shrink-0"
+                      className="px-2.5 py-1 text-[11px] font-semibold text-[#d8c49d] bg-[#9d1117]/10 hover:bg-[#9d1117]/15 rounded-lg cursor-pointer transition shrink-0"
                     >
                       Change
                     </label>
@@ -614,11 +614,11 @@ export default function AddExpenseModal({
                     }}
                     className={`p-3 border-2 border-dashed rounded-xl text-center cursor-pointer transition block ${
                       isDraggingProof
-                        ? 'border-indigo-600 bg-indigo-100/70 ring-2 ring-indigo-400 scale-[1.01]'
-                        : 'border-slate-300 hover:border-indigo-400 hover:bg-indigo-50/20'
+                        ? 'border-[#9d1117] bg-[#9d1117]/12 ring-2 ring-[#9d1117]/50 scale-[1.01]'
+                        : 'border-[#272526] hover:border-[#9d1117]/50 hover:bg-[#9d1117]/8'
                     }`}
                   >
-                    <div className="flex items-center justify-center gap-2 text-indigo-600 font-semibold text-[11px]">
+                    <div className="flex items-center justify-center gap-2 text-[#d8c49d] font-semibold text-[11px]">
                       <Camera className="w-4 h-4" />
                       <span>{isDraggingProof ? 'Drop image here to scan with OCR!' : 'Drag & Drop or Click to Upload Image (Auto-OCR)'}</span>
                     </div>
@@ -628,13 +628,13 @@ export default function AddExpenseModal({
                 {/* UTR Input */}
                 {proofType === 'upi_screenshot' && (
                   <div className="pt-1">
-                    <label className="font-semibold text-slate-700 block mb-1">UPI UTR / Reference ID (12 Digits):</label>
+                    <label className="font-semibold text-[#d8c49d] block mb-1">UPI UTR / Reference ID (12 Digits):</label>
                     <input
                       type="text"
                       value={utr}
                       onChange={(e) => setUtr(e.target.value)}
                       placeholder="e.g. 428192038192"
-                      className="w-full px-3 py-1.5 border border-slate-200 rounded font-mono text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full px-3 py-1.5 border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded font-mono text-xs focus:outline-none focus:ring-1 focus:ring-[#9d1117]"
                     />
                   </div>
                 )}
@@ -642,7 +642,7 @@ export default function AddExpenseModal({
             )}
 
             {proofType === 'no_proof' && (
-              <p className="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded-lg border border-amber-200 leading-relaxed">
+              <p className="text-[11px] text-amber-300 bg-amber-900/20 p-2.5 rounded-lg border border-amber-700/30 leading-relaxed">
                 ℹ️ Without proof, this expense will remain in <strong>Pending Verification</strong> until approved by the Manager (Manager Mode) or approved via In-Chat Group Poll (Democratic Mode).
               </p>
             )}
@@ -650,15 +650,15 @@ export default function AddExpenseModal({
 
           {/* Split Preview */}
           {splitPreview.length > 0 && (
-            <div className="p-3 bg-indigo-50/60 border border-indigo-100 rounded-xl text-xs space-y-1.5">
-              <span className="font-bold text-indigo-900 block">Split Preview:</span>
+            <div className="p-3 bg-[#9d1117]/10 border border-[#9d1117]/20 rounded-xl text-xs space-y-1.5">
+              <span className="font-bold text-[#d8c49d] block">Split Preview:</span>
               <div className="grid grid-cols-2 gap-2">
                 {splitPreview.map(p => {
                   const m = members.find(mem => mem.id === p.memberId);
                   return (
-                    <div key={p.memberId} className="flex justify-between bg-white/80 p-1.5 rounded border border-indigo-100/50">
-                      <span className="text-slate-700 truncate">{m?.display_name?.split(' ')[0]}:</span>
-                      <span className="font-bold font-mono text-indigo-950">₹{p.shareAmount}</span>
+                    <div key={p.memberId} className="flex justify-between bg-[#101011]/80 p-1.5 rounded border border-[#9d1117]/20">
+                      <span className="text-[#d8c49d] truncate">{m?.display_name?.split(' ')[0]}:</span>
+                      <span className="font-bold font-mono text-[#d8c49d]">₹{p.shareAmount}</span>
                     </div>
                   );
                 })}
@@ -667,18 +667,18 @@ export default function AddExpenseModal({
           )}
 
           {/* Footer Submit */}
-          <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+          <div className="pt-3 flex items-center justify-end gap-2 border-t border-[#1d1b1c]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition"
+              className="px-4 py-2 text-xs font-semibold text-[#9c9791] hover:bg-[#151516] hover:text-[#f2eee5] rounded-lg transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition disabled:opacity-50"
+              className="px-5 py-2 text-xs font-semibold text-[#f2eee5] bg-[#9d1117] hover:bg-[#7a0d12] rounded-lg shadow-sm shadow-[#9d1117]/20 transition disabled:opacity-50"
             >
               {loading ? 'Recording...' : 'Record Expense'}
             </button>

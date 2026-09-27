@@ -130,40 +130,40 @@ export default function TransactionLogView({
     <div className="space-y-6 animate-fadeIn">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-[#1a090a] via-[#0d0b0c] to-[#050505] text-white rounded-3xl p-6 sm:p-7 border border-[#272526] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1.5 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
-            <History className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#9d1117]/20 text-[#d8c49d] text-xs font-semibold border border-[#9d1117]/30">
+            <History className="w-3.5 h-3.5 text-[#d8c49d]" />
             Transparent Financial Ledger History
           </div>
           <h2 className="text-xl sm:text-2xl font-black tracking-tight">
             Transaction & Recalculation Log
           </h2>
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-xs text-[#9c9791] leading-relaxed">
             A chronological, tamper-evident audit record of every expense addition, booking split, and automatic recalculation adjustment across the trip.
           </p>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <div className="bg-white/10 px-4 py-2.5 rounded-2xl border border-white/10 text-center">
-            <div className="text-[10px] text-slate-400 uppercase font-semibold">Total Logged Events</div>
+          <div className="bg-white/5 px-4 py-2.5 rounded-2xl border border-white/5 text-center">
+            <div className="text-[10px] text-[#9c9791] uppercase font-semibold">Total Logged Events</div>
             <div className="text-lg font-black font-mono">{logEntries.length}</div>
           </div>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#101011] p-4 rounded-2xl border border-[#272526] shadow-sm">
         
         {/* Search Input */}
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[#9c9791] absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search by description, member, or vendor..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full pl-9 pr-3 py-1.5 text-xs border border-[#272526] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9d1117] bg-[#0a0a0b] text-[#f2eee5]"
           />
         </div>
 
@@ -173,8 +173,8 @@ export default function TransactionLogView({
             onClick={() => setFilterType('all')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
               filterType === 'all'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200'
+                ? 'bg-[#9d1117] text-white shadow-sm'
+                : 'text-[#9c9791] hover:text-[#f2eee5] bg-[#151516] hover:bg-[#1d1b1c]'
             }`}
           >
             All Logs ({logEntries.length})
@@ -185,7 +185,7 @@ export default function TransactionLogView({
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
               filterType === 'expense'
                 ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200'
+                : 'text-[#9c9791] hover:text-[#f2eee5] bg-[#151516] hover:bg-[#1d1b1c]'
             }`}
           >
             ➕ Expenses Added ({logEntries.filter(l => l.eventType === 'expense_created').length})
@@ -196,7 +196,7 @@ export default function TransactionLogView({
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
               filterType === 'recalculation'
                 ? 'bg-amber-600 text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200'
+                : 'text-[#9c9791] hover:text-[#f2eee5] bg-[#151516] hover:bg-[#1d1b1c]'
             }`}
           >
             🔄 Recalculations ({logEntries.filter(l => l.eventType === 'recalculation_adjustment').length})
@@ -207,10 +207,10 @@ export default function TransactionLogView({
 
       {/* Log Feed */}
       {filteredEntries.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-          <History className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-          <h3 className="text-base font-bold text-slate-800">No Transaction Logs Found</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+        <div className="text-center py-16 px-4 bg-[#101011] rounded-2xl border border-[#272526] p-8 shadow-sm">
+          <History className="w-10 h-10 text-[#9c9791] mx-auto mb-2" />
+          <h3 className="text-base font-bold text-[#f2eee5]">No Transaction Logs Found</h3>
+          <p className="text-xs text-[#9c9791] max-w-sm mx-auto mt-1">
             {searchQuery
               ? `No activity matching "${searchQuery}". Try clearing your search.`
               : 'As expenses are recorded or members depart the trip, detailed transaction and recalculation records will appear here.'}
@@ -229,19 +229,19 @@ export default function TransactionLogView({
               return (
                 <div
                   key={log.id}
-                  className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-indigo-200 transition space-y-3"
+                  className="bg-[#101011] rounded-2xl border border-[#272526] p-5 shadow-sm hover:border-[#9d1117]/30 transition space-y-3"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1d1b1c] pb-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                      <div className="w-7 h-7 rounded-xl bg-emerald-900/20 text-[#a8c49b] flex items-center justify-center shrink-0">
                         <PlusCircle className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <span className="text-xs font-bold text-emerald-400 bg-emerald-900/20 px-2 py-0.5 rounded-full border border-emerald-700/30">
                           Expense Added
                         </span>
                         {log.vendorName && (
-                          <span className="ml-2 text-xs font-medium text-slate-500">
+                          <span className="ml-2 text-xs font-medium text-[#9c9791]">
                             via {log.vendorName}
                             {log.bookingReference && ` (${log.bookingReference})`}
                           </span>
@@ -249,7 +249,7 @@ export default function TransactionLogView({
                       </div>
                     </div>
 
-                    <span className="text-[11px] text-slate-400 font-mono">
+                    <span className="text-[11px] text-[#9c9791] font-mono">
                       {formattedTime}
                     </span>
                   </div>
@@ -257,18 +257,18 @@ export default function TransactionLogView({
                   {/* Body */}
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                     <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-slate-900">{log.title}</h4>
-                      <p className="text-xs text-slate-500">
-                        Paid by <strong className="text-slate-800">{log.payerName}</strong> &bull; Split method:{' '}
-                        <span className="capitalize font-semibold text-slate-700">{log.splitMethod.replace('_', ' ')}</span>
+                      <h4 className="text-sm font-bold text-[#f2eee5]">{log.title}</h4>
+                      <p className="text-xs text-[#9c9791]">
+                        Paid by <strong className="text-[#f2eee5]">{log.payerName}</strong> &bull; Split method:{' '}
+                        <span className="capitalize font-semibold text-[#d8c49d]">{log.splitMethod.replace('_', ' ')}</span>
                       </p>
                     </div>
 
                     <div className="text-left sm:text-right shrink-0">
-                      <div className="text-lg font-black font-mono text-slate-900">
+                      <div className="text-lg font-black font-mono text-[#f2eee5]">
                         ₹{log.amount.toLocaleString()}
                       </div>
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-[#9c9791]">
                         {log.allocations.length} participating members
                       </span>
                     </div>
@@ -276,8 +276,8 @@ export default function TransactionLogView({
 
                   {/* Allocations breakdown pill list */}
                   {log.allocations.length > 0 && (
-                    <div className="pt-2 border-t border-slate-100">
-                      <span className="text-[11px] font-semibold text-slate-600 block mb-1.5">
+                    <div className="pt-2 border-t border-[#1d1b1c]">
+                      <span className="text-[11px] font-semibold text-[#9c9791] block mb-1.5">
                         Member Contributions Breakdown:
                       </span>
                       <div className="flex flex-wrap items-center gap-1.5">
@@ -287,10 +287,10 @@ export default function TransactionLogView({
                           return (
                             <span
                               key={alloc.memberId}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-700"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#050505] border border-[#272526] text-[11px] text-[#d8c49d]"
                             >
                               <span className="font-medium">{m?.display_name?.split(' ')[0] || 'Member'}:</span>
-                              <strong className="font-mono text-indigo-900 font-bold">₹{share.toLocaleString()}</strong>
+                              <strong className="font-mono text-[#d8c49d] font-bold">₹{share.toLocaleString()}</strong>
                             </span>
                           );
                         })}
@@ -313,30 +313,30 @@ export default function TransactionLogView({
               return (
                 <div
                   key={log.id}
-                  className="bg-white rounded-2xl border-2 border-amber-200/80 p-5 shadow-sm hover:border-amber-300 transition space-y-3"
+                  className="bg-[#101011] rounded-2xl border-2 border-amber-700/30 p-5 shadow-sm hover:border-amber-700/40 transition space-y-3"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-100 pb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-900/20 pb-3">
                     <div className="flex items-center gap-2">
                       <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
-                        isRemoved ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600'
+                        isRemoved ? 'bg-rose-900/20 text-[#e18a8a]' : 'bg-amber-900/20 text-amber-400'
                       }`}>
                         <RefreshCw className="w-4 h-4 animate-spin-slow" />
                       </div>
                       <div>
                         <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                           isRemoved 
-                            ? 'bg-rose-50 text-rose-700 border-rose-200' 
-                            : 'bg-amber-50 text-amber-700 border-amber-200'
+                            ? 'bg-rose-900/20 text-rose-400 border-rose-700/30' 
+                            : 'bg-amber-900/20 text-amber-300 border-amber-700/30'
                         }`}>
                           {isRemoved ? 'Participant Removed (Recalculated)' : 'Participant Left (Recalculated)'}
                         </span>
-                        <span className="ml-2 text-xs font-semibold text-slate-800">
+                        <span className="ml-2 text-xs font-semibold text-[#f2eee5]">
                           {log.title}
                         </span>
                       </div>
                     </div>
 
-                    <span className="text-[11px] text-slate-400 font-mono">
+                    <span className="text-[11px] text-[#9c9791] font-mono">
                       {formattedTime}
                     </span>
                   </div>
@@ -344,37 +344,37 @@ export default function TransactionLogView({
                   {/* Body & Impact Delta */}
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                     <div className="space-y-1.5 max-w-md">
-                      <div className="text-xs text-slate-500">
-                        Affected Spend Item: <strong className="text-slate-800 font-semibold">{log.affectedItemTitle}</strong>
+                      <div className="text-xs text-[#9c9791]">
+                        Affected Spend Item: <strong className="text-[#f2eee5] font-semibold">{log.affectedItemTitle}</strong>
                       </div>
                       {log.impactSummary && (
-                        <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-50 px-2.5 py-1.5 rounded-xl border border-amber-200">
-                          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 bg-amber-900/20 px-2.5 py-1.5 rounded-xl border border-amber-700/30">
+                          <ShieldCheck className="w-4 h-4 text-[#a8c49b] shrink-0" />
                           <span>{log.impactSummary}</span>
                         </div>
                       )}
                     </div>
 
                     {/* Pre-Committed Share Locked & Zero-Loss Protection Card */}
-                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5 text-left sm:text-right shrink-0 min-w-[200px]">
-                      <div className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Financial Protection</div>
+                    <div className="bg-[#050505] p-3 rounded-xl border border-[#272526] text-xs space-y-1.5 text-left sm:text-right shrink-0 min-w-[200px]">
+                      <div className="text-[10px] text-[#9c9791] font-semibold uppercase tracking-wider">Financial Protection</div>
                       {perPersonDelta > 0 && !log.snapshotAfter?.lockedShareAmount ? (
-                        <div className="flex items-center sm:justify-end gap-1.5 font-bold text-amber-700 text-xs">
+                        <div className="flex items-center sm:justify-end gap-1.5 font-bold text-amber-300 text-xs">
                           <AlertCircle className="w-3.5 h-3.5" />
                           <span>Absorbed Split: +₹{perPersonDelta.toLocaleString()}/person</span>
                         </div>
                       ) : (
-                        <div className="flex items-center sm:justify-end gap-1.5 font-bold text-emerald-700 text-xs">
+                        <div className="flex items-center sm:justify-end gap-1.5 font-bold text-emerald-400 text-xs">
                           <ShieldCheck className="w-3.5 h-3.5" />
                           <span>Remaining members: ₹0 loss</span>
                         </div>
                       )}
                       {log.snapshotAfter?.lockedShareAmount ? (
-                        <div className="text-[11px] text-slate-600">
-                          Locked Debt Due: <strong className="font-mono text-rose-700 font-bold">₹{Number(log.snapshotAfter.lockedShareAmount).toLocaleString()}</strong>
+                        <div className="text-[11px] text-[#9c9791]">
+                          Locked Debt Due: <strong className="font-mono text-rose-400 font-bold">₹{Number(log.snapshotAfter.lockedShareAmount).toLocaleString()}</strong>
                         </div>
                       ) : (
-                        <div className="text-[11px] text-slate-500 font-mono">
+                        <div className="text-[11px] text-[#9c9791] font-mono">
                           Agreed Share: ₹{beforePerPerson.toLocaleString()}/person
                         </div>
                       )}
@@ -383,8 +383,8 @@ export default function TransactionLogView({
 
                   {/* Allocations Status Breakdown */}
                   {log.snapshotAfter?.allocations?.length > 0 && (
-                    <div className="pt-2 border-t border-slate-100">
-                      <span className="text-[11px] font-semibold text-slate-600 block mb-1.5">
+                    <div className="pt-2 border-t border-[#1d1b1c]">
+                      <span className="text-[11px] font-semibold text-[#9c9791] block mb-1.5">
                         Allocations &amp; Liability Status:
                       </span>
                       <div className="flex flex-wrap items-center gap-1.5">
@@ -398,22 +398,22 @@ export default function TransactionLogView({
                               key={alloc.memberId}
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] border ${
                                 isLocked
-                                  ? 'bg-rose-50 border-rose-200 text-rose-800'
-                                  : 'bg-indigo-50/50 border-indigo-100 text-slate-700'
+                                  ? 'bg-rose-900/20 border-rose-700/30 text-rose-400'
+                                  : 'bg-[#9d1117]/8 border-[#9d1117]/20 text-[#d8c49d]'
                               }`}
                             >
                               <span className="font-medium">{m?.display_name?.split(' ')[0] || 'Traveler'}:</span>
                               <strong className="font-mono font-bold">₹{share.toLocaleString()}</strong>
                               {isLocked ? (
-                                <span className="text-[9px] uppercase font-black px-1 py-0.2 rounded bg-rose-200 text-rose-800">
+                                <span className="text-[9px] uppercase font-black px-1 py-0.2 rounded bg-rose-900/20 text-rose-400">
                                   Locked Due
                                 </span>
                               ) : perPersonDelta > 0 && !log.snapshotAfter?.lockedShareAmount ? (
-                                <span className="text-[9px] uppercase font-bold px-1 py-0.2 rounded bg-amber-100 text-amber-800">
+                                <span className="text-[9px] uppercase font-bold px-1 py-0.2 rounded bg-amber-900/25 text-amber-300">
                                   Adjusted
                                 </span>
                               ) : (
-                                <span className="text-[9px] uppercase font-bold px-1 py-0.2 rounded bg-emerald-100 text-emerald-800">
+                                <span className="text-[9px] uppercase font-bold px-1 py-0.2 rounded bg-emerald-900/20 text-emerald-400">
                                   Unchanged
                                 </span>
                               )}

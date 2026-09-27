@@ -59,25 +59,25 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/72 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-[#101011] w-full max-w-lg rounded-2xl shadow-2xl border border-[#272526] overflow-hidden">
         
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="px-6 py-4 border-b border-[#1d1b1c] flex items-center justify-between bg-[#0a0a0b]">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Create New Group Trip</h2>
-            <p className="text-xs text-slate-500">Set up itinerary ledger and governance rules</p>
+            <h2 className="text-lg font-bold text-[#f2eee5]">Create New Group Trip</h2>
+            <p className="text-xs text-[#9c9791]">Set up itinerary ledger and governance rules</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-[#9c9791] hover:text-[#f2eee5] hover:bg-[#151516] transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
+          <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-900/20 border border-rose-700/30 text-xs text-rose-400">
             {error}
           </div>
         )}
@@ -87,28 +87,28 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
           {/* Trip Title & Destination */}
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Trip Name</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Trip Name</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Goa Beach Vacation 2026"
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Destination</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Destination</label>
               <div className="relative">
-                <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <MapPin className="w-4 h-4 text-[#9c9791] absolute left-3 top-2.5" />
                 <input
                   type="text"
                   required
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   placeholder="e.g. North Goa, India"
-                  className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-9 pr-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
                 />
               </div>
             </div>
@@ -117,31 +117,31 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
           {/* Dates */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Start Date</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Start Date</label>
               <input
                 type="date"
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">End Date</label>
+              <label className="block text-xs font-semibold text-[#d8c49d] mb-1">End Date</label>
               <input
                 type="date"
                 required
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
               />
             </div>
           </div>
 
           {/* Governance Mode Selection (Core Differentiator!) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Trip Governance Mode <span className="text-indigo-600 font-normal">(Who approves & verifies?)</span>
+            <label className="block text-xs font-semibold text-[#d8c49d] mb-1.5">
+              Trip Governance Mode <span className="text-[#d8c49d] font-normal">(Who approves & verifies?)</span>
             </label>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -151,20 +151,20 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
                 onClick={() => setGovernanceMode('manager_based')}
                 className={`p-3 rounded-xl border cursor-pointer transition ${
                   governanceMode === 'manager_based'
-                    ? 'border-indigo-600 bg-indigo-50/50 shadow-sm ring-1 ring-indigo-500'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
+                    ? 'border-[#9d1117] bg-[#9d1117]/8 shadow-sm ring-1 ring-[#9d1117]'
+                    : 'border-[#272526] hover:border-[#272526] bg-[#101011]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
-                    <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-[#f2eee5]">
+                    <ShieldCheck className="w-4 h-4 text-[#d8c49d]" />
                     Manager-Based
                   </div>
                   {governanceMode === 'manager_based' && (
-                    <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                    <CheckCircle2 className="w-4 h-4 text-[#d8c49d]" />
                   )}
                 </div>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
+                <p className="text-[11px] text-[#9c9791] leading-relaxed">
                   Trip Owner & Managers hold authority. Expenses without receipts require Manager approval.
                 </p>
               </div>
@@ -174,20 +174,20 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
                 onClick={() => setGovernanceMode('democratic')}
                 className={`p-3 rounded-xl border cursor-pointer transition ${
                   governanceMode === 'democratic'
-                    ? 'border-indigo-600 bg-indigo-50/50 shadow-sm ring-1 ring-indigo-500'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
+                    ? 'border-[#9d1117] bg-[#9d1117]/8 shadow-sm ring-1 ring-[#9d1117]'
+                    : 'border-[#272526] hover:border-[#272526] bg-[#101011]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
-                    <Users className="w-4 h-4 text-emerald-600" />
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-[#f2eee5]">
+                    <Users className="w-4 h-4 text-[#a8c49b]" />
                     Democratic (Group)
                   </div>
                   {governanceMode === 'democratic' && (
-                    <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                    <CheckCircle2 className="w-4 h-4 text-[#d8c49d]" />
                   )}
                 </div>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
+                <p className="text-[11px] text-[#9c9791] leading-relaxed">
                   Flat hierarchy. All members contribute. No-proof expenses trigger in-chat voting polls.
                 </p>
               </div>
@@ -197,13 +197,13 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Description (Optional)</label>
+            <label className="block text-xs font-semibold text-[#d8c49d] mb-1">Description (Optional)</label>
             <textarea
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g. Friends road trip staying at beach villa, renting self-drive Thar, and scuba diving."
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 text-sm border border-[#272526] bg-[#0a0a0b] text-[#f2eee5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9d1117]"
             />
           </div>
 
@@ -212,14 +212,14 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition"
+              className="px-4 py-2 text-xs font-semibold text-[#9c9791] hover:bg-[#151516] hover:text-[#f2eee5] rounded-lg transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition disabled:opacity-50 flex items-center gap-1.5"
+              className="px-5 py-2 text-xs font-semibold text-[#f2eee5] bg-[#9d1117] hover:bg-[#7a0d12] rounded-lg shadow-sm shadow-[#9d1117]/20 transition disabled:opacity-50 flex items-center gap-1.5"
             >
               {loading ? 'Creating...' : 'Create Trip & Ledger'}
             </button>

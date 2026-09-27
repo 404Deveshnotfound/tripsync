@@ -65,20 +65,20 @@ export default function DashboardPage() {
     <div className="space-y-8 animate-fadeIn">
       
       {/* Hero Welcome & Actions Bar */}
-      <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#1a090a] via-[#0d0b0c] to-[#050505] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
         {/* Background decorative blur */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#9d1117]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="max-w-xl space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur text-xs font-semibold text-indigo-200 border border-white/10">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 backdrop-blur text-xs font-semibold text-[#d8c49d] border border-white/5">
+              <Sparkles className="w-3.5 h-3.5 text-[#d8c49d]" />
               Living Verified Travel Ledger
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               {user ? `Welcome back, ${profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'Traveler'}! ✈️` : 'Welcome to TripSync! ✈️'}
             </h1>
-            <p className="text-sm text-indigo-100/80 leading-relaxed">
+            <p className="text-sm text-[#9c9791] leading-relaxed">
               Coordinate multi-vendor bookings, dynamic recalculation when members leave, and verified UPI settlement.
             </p>
           </div>
@@ -93,9 +93,9 @@ export default function DashboardPage() {
                 }
                 setIsJoinOpen(true);
               }}
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 backdrop-blur transition flex items-center gap-2 shadow-sm"
+              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/10 backdrop-blur transition flex items-center gap-2 shadow-sm"
             >
-              <KeyRound className="w-4 h-4 text-indigo-300" />
+              <KeyRound className="w-4 h-4 text-[#d8c49d]" />
               Join with Code
             </button>
             <button
@@ -106,7 +106,7 @@ export default function DashboardPage() {
                 }
                 setIsCreateOpen(true);
               }}
-              className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#e2d0a8] to-[#c5ae7f] text-[#0b0a09] hover:from-[#ecdbb5] hover:to-[#d4bd8e] font-semibold text-xs shadow-lg shadow-[#d8c49d]/20 border border-[#b79f70] transition flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Create Trip
@@ -116,20 +116,20 @@ export default function DashboardPage() {
 
         {/* Feature Pills */}
         <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-          <div className="flex items-center gap-2 text-indigo-200">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="flex items-center gap-2 text-[#d8c49d]">
+            <CheckCircle2 className="w-4 h-4 text-[#a8c49b] shrink-0" />
             <span>Dual Governance (Manager & Democratic)</span>
           </div>
-          <div className="flex items-center gap-2 text-indigo-200">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="flex items-center gap-2 text-[#d8c49d]">
+            <CheckCircle2 className="w-4 h-4 text-[#a8c49b] shrink-0" />
             <span>Dynamic Recalculation Engine</span>
           </div>
-          <div className="flex items-center gap-2 text-indigo-200">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="flex items-center gap-2 text-[#d8c49d]">
+            <CheckCircle2 className="w-4 h-4 text-[#a8c49b] shrink-0" />
             <span>Mobile UPI Intent & Dynamic QR</span>
           </div>
-          <div className="flex items-center gap-2 text-indigo-200">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="flex items-center gap-2 text-[#d8c49d]">
+            <CheckCircle2 className="w-4 h-4 text-[#a8c49b] shrink-0" />
             <span>AI & OCR Expense Scanner</span>
           </div>
         </div>
@@ -139,13 +139,13 @@ export default function DashboardPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Your Group Trips</h2>
-            <p className="text-xs text-slate-500">Active itineraries and verified financial ledgers</p>
+            <h2 className="text-lg font-bold text-[#f2eee5]">Your Group Trips</h2>
+            <p className="text-xs text-[#9c9791]">Active itineraries and verified financial ledgers</p>
           </div>
           <button
             onClick={fetchTrips}
             title="Refresh trips"
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition"
+            className="p-2 text-[#9c9791] hover:text-[#f2eee5] hover:bg-[#1d1b1c] rounded-lg transition"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -155,17 +155,17 @@ export default function DashboardPage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-48 rounded-2xl bg-slate-100 animate-pulse border border-slate-200" />
+              <div key={i} className="h-48 rounded-2xl bg-[#151516] animate-pulse border border-[#272526]" />
             ))}
           </div>
         ) : trips.length === 0 ? (
           /* Empty State */
-          <div className="text-center py-16 px-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 mx-auto flex items-center justify-center mb-3">
+          <div className="text-center py-16 px-4 bg-[#101011] rounded-2xl border border-[#272526] shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-[#9d1117]/10 text-[#d8c49d] mx-auto flex items-center justify-center mb-3">
               <Compass className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-bold text-slate-800">No Trips Found</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-6">
+            <h3 className="text-base font-bold text-[#f2eee5]">No Trips Found</h3>
+            <p className="text-xs text-[#9c9791] max-w-sm mx-auto mt-1 mb-6">
               You haven&apos;t created or joined any trips yet. Create one or join with a 7-character invite code.
             </p>
             <div className="flex items-center justify-center gap-3">
@@ -177,7 +177,7 @@ export default function DashboardPage() {
                   }
                   setIsJoinOpen(true);
                 }}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition"
+                className="px-4 py-2 text-xs font-semibold text-[#9c9791] bg-[#151516] hover:bg-[#1d1b1c] rounded-lg transition"
               >
                 Enter Code
               </button>
@@ -189,7 +189,7 @@ export default function DashboardPage() {
                   }
                   setIsCreateOpen(true);
                 }}
-                className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition"
+                className="px-4 py-2 text-xs font-semibold text-white bg-[#9d1117] hover:bg-[#7a0d12] rounded-lg shadow-sm shadow-[#9d1117]/20 transition"
               >
                 Create a Trip
               </button>
@@ -201,15 +201,15 @@ export default function DashboardPage() {
             {trips.map((trip) => {
               const isManagerTrip = trip.governance_mode === 'manager_based';
               const roleColor = 
-                trip.myRole === 'owner' ? 'bg-indigo-100 text-indigo-800 border-indigo-200' :
-                trip.myRole === 'manager' ? 'bg-amber-100 text-amber-800 border-amber-200' :
-                'bg-slate-100 text-slate-700 border-slate-200';
+                trip.myRole === 'owner' ? 'bg-[#9d1117]/15 text-[#d8c49d] border-[#9d1117]/30' :
+                trip.myRole === 'manager' ? 'bg-amber-900/25 text-amber-300 border-amber-700/30' :
+                'bg-[#151516] text-[#9c9791] border-[#272526]';
 
               return (
                 <Link
                   key={trip.id}
                   href={`/trips/${trip.id}`}
-                  className="group bg-white rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-lg transition p-5 flex flex-col justify-between"
+                  className="group bg-[#101011] rounded-2xl border border-[#272526] hover:border-[#9d1117]/50 hover:shadow-lg transition p-5 flex flex-col justify-between"
                 >
                   <div className="space-y-3">
                     
@@ -218,8 +218,8 @@ export default function DashboardPage() {
                       {/* Governance Mode */}
                       <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
                         isManagerTrip 
-                          ? 'bg-indigo-50 text-indigo-700 border-indigo-200' 
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          ? 'bg-[#9d1117]/10 text-[#d8c49d] border-[#9d1117]/30' 
+                          : 'bg-emerald-900/20 text-emerald-400 border-emerald-700/30'
                       }`}>
                         {isManagerTrip ? <ShieldCheck className="w-3 h-3" /> : <Users className="w-3 h-3" />}
                         {isManagerTrip ? 'Manager-Based' : 'Democratic'}
@@ -235,18 +235,18 @@ export default function DashboardPage() {
 
                     {/* Trip Title & Destination */}
                     <div>
-                      <h3 className="font-bold text-base text-slate-900 group-hover:text-indigo-600 transition">
+                      <h3 className="font-bold text-base text-[#f2eee5] group-hover:text-[#d8c49d] transition">
                         {trip.title}
                       </h3>
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <div className="flex items-center gap-1.5 text-xs text-[#9c9791] mt-1">
+                        <MapPin className="w-3.5 h-3.5 text-[#9c9791] shrink-0" />
                         <span>{trip.destination}</span>
                       </div>
                     </div>
 
                     {/* Description preview */}
                     {trip.description && (
-                      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-[#9c9791] line-clamp-2 leading-relaxed">
                         {trip.description}
                       </p>
                     )}
@@ -254,13 +254,13 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Bottom Metadata */}
-                  <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                  <div className="mt-5 pt-4 border-t border-[#1d1b1c] flex items-center justify-between text-xs text-[#9c9791]">
                     <div className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                      <Calendar className="w-3.5 h-3.5 text-[#9c9791]" />
                       <span>{trip.start_date}</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 font-semibold text-indigo-600 group-hover:translate-x-1 transition">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#d8c49d] group-hover:translate-x-1 transition">
                       <span>View Ledger</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </div>

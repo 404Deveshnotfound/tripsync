@@ -103,7 +103,7 @@ export default function GoogleAuthButton({
           type="button"
           onClick={handleFallbackClick}
           disabled={loading}
-          className="w-full py-2.5 px-4 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-xl border border-slate-300 shadow-sm transition flex items-center justify-center gap-3 text-sm disabled:opacity-50"
+          className="w-full py-2.5 px-4 bg-[#101011] hover:bg-[#151516] text-[#f2eee5] font-semibold rounded-xl border border-[#272526] shadow-sm transition flex items-center justify-center gap-3 text-sm disabled:opacity-50"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path

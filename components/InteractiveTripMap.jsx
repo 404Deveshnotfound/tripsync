@@ -287,16 +287,16 @@ export default function InteractiveTripMap({
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
+    <div className="bg-[#101011] rounded-3xl border border-[#272526] p-6 shadow-sm space-y-4">
       
       {/* Header with Title & Map Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-base font-bold text-[#f2eee5] flex items-center gap-2">
             <MapPin className="w-4 h-4 text-rose-500" />
             Interactive Trip & Environmental Map
           </h3>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#9c9791]">
             Real satellite & street view showing visited venues, activity spots, and dining places plotted from expenses.
           </p>
         </div>
@@ -304,13 +304,13 @@ export default function InteractiveTripMap({
         {/* Map Type Switcher & Controls */}
         <div className="flex items-center gap-2 self-start sm:self-auto">
           {/* Satellite vs Street Toggle */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <div className="flex items-center bg-[#151516] p-1 rounded-xl border border-[#272526]">
             <button
               onClick={() => setMapType('satellite')}
               className={`px-3 py-1 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 ${
                 mapType === 'satellite'
-                  ? 'bg-slate-900 text-white shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#101011] text-[#f2eee5] shadow-xs font-bold'
+                  : 'text-[#9c9791] hover:text-[#f2eee5]'
               }`}
             >
               🛰️ Satellite
@@ -319,8 +319,8 @@ export default function InteractiveTripMap({
               onClick={() => setMapType('streets')}
               className={`px-3 py-1 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 ${
                 mapType === 'streets'
-                  ? 'bg-indigo-600 text-white shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#9d1117] text-white shadow-xs font-bold'
+                  : 'text-[#9c9791] hover:text-[#f2eee5]'
               }`}
             >
               🗺️ Streets
@@ -328,18 +328,18 @@ export default function InteractiveTripMap({
           </div>
 
           {/* Custom Zoom Controls */}
-          <div className="flex items-center bg-slate-100 rounded-xl border border-slate-200 overflow-hidden">
+          <div className="flex items-center bg-[#151516] rounded-xl border border-[#272526] overflow-hidden">
             <button
               onClick={handleZoomIn}
-              className="p-1.5 hover:bg-slate-200 text-slate-700 transition"
+              className="p-1.5 hover:bg-[#272526] text-[#d8c49d] transition"
               title="Zoom In"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
-            <div className="w-[1px] h-4 bg-slate-300" />
+            <div className="w-[1px] h-4 bg-[#272526]" />
             <button
               onClick={handleZoomOut}
-              className="p-1.5 hover:bg-slate-200 text-slate-700 transition"
+              className="p-1.5 hover:bg-[#272526] text-[#d8c49d] transition"
               title="Zoom Out"
             >
               <ZoomOut className="w-4 h-4" />
@@ -349,16 +349,16 @@ export default function InteractiveTripMap({
       </div>
 
       {/* Actual Map Canvas */}
-      <div className="relative w-full h-[450px] sm:h-[480px] rounded-2xl overflow-hidden border border-slate-300 shadow-inner bg-slate-900">
+      <div className="relative w-full h-[450px] sm:h-[480px] rounded-2xl overflow-hidden border border-[#272526] shadow-inner bg-[#101011]">
         <div ref={mapContainerRef} className="w-full h-full z-0" />
 
         {/* Satellite Watermark & Live Coordinates Indicator */}
-        <div className="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur border border-white/10 rounded-xl px-3 py-1.5 flex items-center gap-3 text-[10px] text-slate-300 z-10 pointer-events-none">
+        <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur border border-white/10 rounded-xl px-3 py-1.5 flex items-center gap-3 text-[10px] text-[#9c9791] z-10 pointer-events-none">
           <span className="flex items-center gap-1.5 font-bold text-white">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             {mapType === 'satellite' ? 'Esri High-Res Satellite' : 'OpenStreetMap Live'}
           </span>
-          <span className="text-slate-400 font-mono">
+          <span className="text-[#9c9791] font-mono">
             {spots.length} Plotted Venues
           </span>
         </div>
@@ -366,9 +366,9 @@ export default function InteractiveTripMap({
 
       {/* Interactive Visited Spots Carousel / Quick Fly-To Bar */}
       <div className="pt-1">
-        <div className="flex items-center justify-between text-xs text-slate-500 mb-2 font-semibold">
+        <div className="flex items-center justify-between text-xs text-[#9c9791] mb-2 font-semibold">
           <span>Visited Spots from Expenses ({spots.length}):</span>
-          <span className="text-[11px] text-indigo-600 font-normal">Click any spot to fly & inspect</span>
+          <span className="text-[11px] text-[#d8c49d] font-normal">Click any spot to fly & inspect</span>
         </div>
 
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
@@ -381,14 +381,14 @@ export default function InteractiveTripMap({
                 onClick={() => flyToSpot(spot)}
                 className={`px-3 py-2 rounded-xl text-left border text-xs shrink-0 transition flex items-center gap-2 ${
                   isSelected
-                    ? 'bg-indigo-50 border-indigo-500 text-indigo-950 font-bold shadow-xs'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                    ? 'bg-[#9d1117]/10 border-[#9d1117] text-[#d8c49d] font-bold shadow-xs'
+                    : 'bg-[#050505] border-[#272526] text-[#d8c49d] hover:bg-[#151516] hover:border-[#272526]'
                 }`}
               >
                 <span className="text-base">{iconEmoji}</span>
                 <div>
                   <div className="truncate max-w-[130px] font-semibold">{spot.title}</div>
-                  <div className="text-[10px] text-slate-400 font-mono">₹{spot.amount.toLocaleString()}</div>
+                  <div className="text-[10px] text-[#9c9791] font-mono">₹{spot.amount.toLocaleString()}</div>
                 </div>
               </button>
             );

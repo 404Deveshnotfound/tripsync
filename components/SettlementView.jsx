@@ -164,28 +164,28 @@ export default function SettlementView({
     <div className="space-y-8 animate-fadeIn">
       
       {/* Banner / Differentiator Explanation */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-800 space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+      <div className="bg-gradient-to-r from-[#1a090a] via-[#0d0b0c] to-[#050505] text-white rounded-3xl p-6 sm:p-8 shadow-sm border border-[#272526] space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#9d1117]/20 text-[#d8c49d] text-xs font-semibold border border-[#9d1117]/30">
+          <Sparkles className="w-3.5 h-3.5 text-[#d8c49d]" />
           Greedy Debt Simplification &amp; Explainable Settlement
         </div>
         <h2 className="text-xl sm:text-2xl font-black tracking-tight">
           Smart Group Settlement &amp; Device-Adaptive UPI
         </h2>
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
+        <p className="text-xs sm:text-sm text-[#9c9791] leading-relaxed max-w-2xl">
           We minimize redundant peer-to-peer transfers using a greedy cash-flow solver. Every rupee is tied to an itemized explainability breakdown answering <em>&quot;Why do I owe this?&quot;</em>
         </p>
 
         {/* Device indicator pill */}
-        <div className="pt-2 flex items-center gap-2 text-xs text-indigo-200">
+        <div className="pt-2 flex items-center gap-2 text-xs text-[#d8c49d]">
           {isMobile ? (
-            <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
-              <Smartphone className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+              <Smartphone className="w-3.5 h-3.5 text-[#d8c49d]" />
               Mobile Detected: One-tap deep-link UPI Intent launch active
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
-              <Monitor className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+              <Monitor className="w-3.5 h-3.5 text-[#d8c49d]" />
               Desktop Detected: Dynamic SVG QR Code generator active
             </span>
           )}
@@ -201,38 +201,38 @@ export default function SettlementView({
             <div
               key={m.memberId}
               className={`p-4 rounded-2xl border transition ${
-                isMe ? 'bg-indigo-50/50 border-indigo-200 shadow-sm' : 'bg-white border-slate-200'
+                isMe ? 'bg-[#9d1117]/8 border-[#9d1117]/20 shadow-sm' : 'bg-[#101011] border-[#272526]'
               }`}
             >
               <div className="flex items-center justify-between text-xs mb-1">
-                <span className="font-bold text-slate-900 truncate">
+                <span className="font-bold text-[#f2eee5] truncate">
                   {m.displayName} {isMe && '(You)'}
                   {isDeparted && (
-                    <span className="ml-1.5 text-[9px] uppercase font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+                    <span className="ml-1.5 text-[9px] uppercase font-bold text-rose-400 bg-rose-900/20 px-1.5 py-0.5 rounded border border-rose-700/30">
                       Departed
                     </span>
                   )}
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  m.isCreditor ? 'bg-emerald-50 text-emerald-700' :
-                  m.isDebtor ? 'bg-rose-50 text-rose-700' :
-                  'bg-slate-100 text-slate-600'
+                  m.isCreditor ? 'bg-emerald-900/20 text-emerald-400' :
+                  m.isDebtor ? 'bg-rose-900/20 text-rose-400' :
+                  'bg-[#151516] text-[#9c9791]'
                 }`}>
                   {m.isCreditor ? 'To Receive' : m.isDebtor ? 'Owes' : 'Settled'}
                 </span>
               </div>
 
               <div className={`text-lg font-black font-mono ${
-                m.isCreditor ? 'text-emerald-600' :
-                m.isDebtor ? 'text-rose-600' :
-                'text-slate-400'
+                m.isCreditor ? 'text-emerald-400' :
+                m.isDebtor ? 'text-rose-400' :
+                'text-[#9c9791]'
               }`}>
                 {m.isCreditor ? `+₹${Number(m.netBalance || 0).toLocaleString()}` :
                  m.isDebtor ? `-₹${Number(Math.abs(m.netBalance || 0)).toLocaleString()}` :
                  '₹0.00'}
               </div>
 
-              <div className="text-[11px] text-slate-400 font-mono mt-1">
+              <div className="text-[11px] text-[#9c9791] font-mono mt-1">
                 UPI: {m.upiId || 'Not linked'}
               </div>
             </div>
@@ -244,19 +244,19 @@ export default function SettlementView({
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <QrCode className="w-4 h-4 text-indigo-600" />
-            <h3 className="text-base font-bold text-slate-900">Simplified Group Transfers</h3>
+            <QrCode className="w-4 h-4 text-[#d8c49d]" />
+            <h3 className="text-base font-bold text-[#f2eee5]">Simplified Group Transfers</h3>
           </div>
-          <span className="text-xs text-slate-500 font-medium">
+          <span className="text-xs text-[#9c9791] font-medium">
             {activeTransfers.length} transfer(s) required to settle entire trip
           </span>
         </div>
 
         {activeTransfers.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm space-y-2">
-            <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
-            <h4 className="text-sm font-bold text-slate-800">All Debts Fully Settled!</h4>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          <div className="bg-[#101011] rounded-2xl border border-[#272526] p-12 text-center shadow-sm space-y-2">
+            <CheckCircle2 className="w-8 h-8 text-[#a8c49b] mx-auto" />
+            <h4 className="text-sm font-bold text-[#f2eee5]">All Debts Fully Settled!</h4>
+            <p className="text-xs text-[#9c9791] max-w-sm mx-auto">
               No outstanding peer-to-peer liabilities remain for this group trip.
             </p>
           </div>
@@ -272,12 +272,12 @@ export default function SettlementView({
               return (
                 <div
                   key={tr.id}
-                  className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition ${
+                  className={`bg-[#101011] rounded-2xl border shadow-sm overflow-hidden transition ${
                     isCompleted 
-                      ? 'border-emerald-200 hover:border-emerald-300' 
+                      ? 'border-emerald-700/30 hover:border-emerald-700/40' 
                       : isVerifying 
-                      ? 'border-amber-300 hover:border-amber-400' 
-                      : 'border-slate-200 hover:border-indigo-200'
+                      ? 'border-amber-700/40 hover:border-amber-700/40' 
+                      : 'border-[#272526] hover:border-[#9d1117]/30'
                   }`}
                 >
                   
@@ -286,33 +286,33 @@ export default function SettlementView({
                     
                     {/* Parties involved */}
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                        <span className={isPayerMe ? 'text-indigo-600 font-black' : ''}>
+                      <div className="flex items-center gap-2 text-sm font-bold text-[#f2eee5]">
+                        <span className={isPayerMe ? 'text-[#d8c49d] font-black' : ''}>
                           {tr.payerName} {isPayerMe && '(You)'}
                         </span>
-                        <ArrowRight className="w-4 h-4 text-slate-400" />
-                        <span className={isReceiverMe ? 'text-indigo-600 font-black' : ''}>
+                        <ArrowRight className="w-4 h-4 text-[#9c9791]" />
+                        <span className={isReceiverMe ? 'text-[#d8c49d] font-black' : ''}>
                           {tr.receiverName} {isReceiverMe && '(You)'}
                         </span>
                       </div>
                       
-                      <div className="text-xs text-slate-500 flex flex-wrap items-center gap-2">
-                        <span>Receiver UPI: <strong className="font-mono text-slate-700">{tr.receiverUpiId}</strong></span>
+                      <div className="text-xs text-[#9c9791] flex flex-wrap items-center gap-2">
+                        <span>Receiver UPI: <strong className="font-mono text-[#d8c49d]">{tr.receiverUpiId}</strong></span>
                         
                         {/* 3 Explicit Status Badges as requested by user */}
                         {isCompleted ? (
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-300 flex items-center gap-1">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-emerald-900/20 text-emerald-400 border-emerald-700/40 flex items-center gap-1">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#a8c49b]" />
                             <span>Settlement Done</span>
                           </span>
                         ) : isVerifying ? (
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-300 flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-amber-900/20 text-amber-300 border-amber-700/40 flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
                             <span>Settlement done by the person who has to pay but not confirmed by the receiver</span>
                           </span>
                         ) : (
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-rose-50 text-rose-700 border-rose-300 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border bg-rose-900/20 text-rose-400 border-rose-700/40 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#d42a2f] animate-pulse" />
                             <span>Settlement Not Done</span>
                           </span>
                         )}
@@ -322,8 +322,8 @@ export default function SettlementView({
                     {/* Amount & Action Buttons */}
                     <div className="flex flex-wrap items-center gap-3">
                       <div className="text-right">
-                        <div className="text-xs text-slate-400">Transfer Amount:</div>
-                        <div className="text-xl font-extrabold text-slate-900 font-mono">
+                        <div className="text-xs text-[#9c9791]">Transfer Amount:</div>
+                        <div className="text-xl font-extrabold text-[#f2eee5] font-mono">
                           ₹{Number(tr.amount || 0).toLocaleString()}
                         </div>
                       </div>
@@ -334,7 +334,7 @@ export default function SettlementView({
                           {/* Option 1: Mobile UPI Intent / Desktop QR */}
                           <button
                             onClick={() => handleInitiatePayment(tr)}
-                            className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5"
+                            className="px-3.5 py-2 bg-[#9d1117] hover:bg-[#7a0d12] text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5"
                             title="Generate dynamic UPI QR / launch UPI Intent"
                           >
                             <QrCode className="w-3.5 h-3.5" />
@@ -356,10 +356,10 @@ export default function SettlementView({
                       {/* Explainability Accordion Button */}
                       <button
                         onClick={() => toggleExpand(tr.id)}
-                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1"
+                        className="px-3 py-2 bg-[#151516] hover:bg-[#1d1b1c] text-[#d8c49d] text-xs font-semibold rounded-xl transition flex items-center gap-1"
                         title="View itemized proof"
                       >
-                        <HelpCircle className="w-3.5 h-3.5 text-indigo-600" />
+                        <HelpCircle className="w-3.5 h-3.5 text-[#d8c49d]" />
                         <span>Why?</span>
                         {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                       </button>
@@ -370,13 +370,13 @@ export default function SettlementView({
 
                   {/* Receiver Handshake Prompt - ONLY DISPLAYED WHEN SENDER HAS VERIFIED IT (Orange state) */}
                   {isVerifying && (
-                    <div className="mx-5 mb-4 p-3.5 bg-amber-50/80 border border-amber-300 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
-                      <div className="space-y-0.5 text-xs text-amber-950">
-                        <div className="font-bold flex items-center gap-1.5 text-amber-900">
-                          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                     <div className="mx-5 mb-4 p-3.5 bg-amber-900/20 border border-amber-700/40 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+                      <div className="space-y-0.5 text-xs text-amber-300">
+                        <div className="font-bold flex items-center gap-1.5 text-amber-300">
+                          <ShieldCheck className="w-4 h-4 text-[#a8c49b] shrink-0" />
                           <span>Payment verified by sender via screenshot</span>
                         </div>
-                        <div className="text-[11px] text-amber-800 flex items-center gap-2 font-mono">
+                        <div className="text-[11px] text-amber-300 flex items-center gap-2 font-mono">
                           {tr.utrNumber && <span>UTR: <strong>{tr.utrNumber}</strong></span>}
                           <span>&bull; Awaiting handshake confirmation from {tr.receiverName}</span>
                         </div>
@@ -387,13 +387,13 @@ export default function SettlementView({
                         <button
                           onClick={() => handleConfirmReceived(tr)}
                           disabled={submittingId === tr.id}
-                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50"
+                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50"
                         >
                           <ThumbsUp className="w-4 h-4" />
                           <span>{submittingId === tr.id ? 'Confirming...' : 'Confirm Payment Received'}</span>
                         </button>
                       ) : (
-                        <span className="text-[11px] text-slate-500 italic bg-white/70 px-2.5 py-1 rounded-lg border border-amber-200">
+                        <span className="text-[11px] text-[#9c9791] italic bg-[#101011]/70 px-2.5 py-1 rounded-lg border border-amber-700/30">
                           Waiting for {tr.receiverName} to confirm receipt
                         </span>
                       )}
@@ -402,27 +402,27 @@ export default function SettlementView({
 
                   {/* Explainable Line-Item Breakdown Drawer */}
                   {isExpanded && (
-                    <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 space-y-2.5 animate-fadeIn">
-                      <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                    <div className="px-6 py-4 bg-[#050505] border-t border-[#1d1b1c] space-y-2.5 animate-fadeIn">
+                      <div className="text-xs font-bold text-[#f2eee5] flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#d8c49d]" />
                         Line-Item Debt Composition for {tr.payerName}:
                       </div>
                       
-                      <div className="divide-y divide-slate-200/60 bg-white rounded-xl border border-slate-200 overflow-hidden">
+                      <div className="divide-y divide-[#272526] bg-[#101011] rounded-xl border border-[#272526] overflow-hidden">
                         {tr.breakdown.length === 0 ? (
-                          <div className="p-3 text-xs text-slate-500">
+                          <div className="p-3 text-xs text-[#9c9791]">
                             General ledger net balance settlement.
                           </div>
                         ) : (
                           tr.breakdown.map((item, idx) => (
                             <div key={idx} className="p-2.5 px-4 flex items-center justify-between text-xs">
                               <div>
-                                <span className="font-bold text-slate-800">{item.title}</span>
-                                <span className="text-[11px] text-slate-500 ml-2 capitalize font-mono">
+                                <span className="font-bold text-[#f2eee5]">{item.title}</span>
+                                <span className="text-[11px] text-[#9c9791] ml-2 capitalize font-mono">
                                   ({item.category} &bull; Fronted by {item.paidByName})
                                 </span>
                               </div>
-                              <span className="font-extrabold text-slate-900 font-mono">
+                              <span className="font-extrabold text-[#f2eee5] font-mono">
                                 ₹{Number(item.shareAmount ?? item.amount ?? 0).toLocaleString()}
                               </span>
                             </div>
@@ -430,7 +430,7 @@ export default function SettlementView({
                         )}
                       </div>
 
-                      <div className="text-[11px] text-slate-400 text-right">
+                      <div className="text-[11px] text-[#9c9791] text-right">
                         Total net liability is calculated deterministically by TripSync backend engine.
                       </div>
                     </div>
@@ -446,16 +446,16 @@ export default function SettlementView({
 
       {/* Dynamic Desktop QR Modal */}
       {activeQrModalTransfer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-200 p-6 text-center space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/72 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#101011] w-full max-w-sm rounded-3xl shadow-2xl border border-[#272526] p-6 text-center space-y-4">
             
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <div className="flex items-center justify-between pb-2 border-b border-[#1d1b1c]">
+              <span className="text-xs font-bold text-[#9c9791] uppercase tracking-wider">
                 Scan &amp; Pay via UPI
               </span>
               <button
                 onClick={() => setActiveQrModalTransfer(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 transition"
+                className="p-1 rounded-lg text-[#9c9791] hover:text-[#f2eee5] transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -463,19 +463,19 @@ export default function SettlementView({
 
             {/* Recipient & Amount */}
             <div>
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-bold text-[#f2eee5]">
                 Pay {activeQrModalTransfer.receiverName}
               </h3>
-              <div className="text-3xl font-black text-indigo-600 font-mono mt-1">
+              <div className="text-3xl font-black text-[#d8c49d] font-mono mt-1">
                 ₹{Number(activeQrModalTransfer.amount || 0).toLocaleString()}
               </div>
-              <p className="text-xs font-mono text-slate-500 mt-1">
+              <p className="text-xs font-mono text-[#9c9791] mt-1">
                 UPI ID: {activeQrModalTransfer.receiverUpiId}
               </p>
             </div>
 
             {/* Dynamic SVG QR Code */}
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 inline-block shadow-inner">
+            <div className="bg-white p-4 rounded-2xl border border-[#272526] inline-block shadow-inner">
               <QRCodeSVG
                 value={activeQrModalTransfer.upiUri}
                 size={200}
@@ -484,22 +484,22 @@ export default function SettlementView({
               />
             </div>
 
-            <p className="text-[11px] text-slate-500 leading-relaxed">
+            <p className="text-[11px] text-[#9c9791] leading-relaxed">
               Open Google Pay, PhonePe, Paytm, or BHIM on your smartphone and scan this code to pay exact amount.
             </p>
 
             {/* Enter UTR option */}
-            <div className="pt-2 border-t border-slate-100 space-y-2">
+            <div className="pt-2 border-t border-[#1d1b1c] space-y-2">
               <input
                 type="text"
                 placeholder="Enter 12-digit UTR reference (optional)"
                 value={utrInput[activeQrModalTransfer.id] || ''}
                 onChange={(e) => setUtrInput({ ...utrInput, [activeQrModalTransfer.id]: e.target.value })}
-                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl font-mono text-center focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs border border-[#272526] rounded-xl font-mono text-center focus:outline-none focus:ring-1 focus:ring-[#9d1117] bg-[#0a0a0b] text-[#f2eee5]"
               />
               <button
                 onClick={() => handleSubmitUtr(activeQrModalTransfer)}
-                className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition"
+                className="w-full py-2 bg-[#9d1117] hover:bg-[#7a0d12] text-white text-xs font-bold rounded-xl transition"
               >
                 Submit Payment for Confirmation
               </button>

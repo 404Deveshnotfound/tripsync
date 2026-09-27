@@ -3,29 +3,61 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --black: #050505;
+  --black-2: #0a0a0b;
+  --panel: #101011;
+  --panel-2: #151516;
+  --line: #272526;
+  --line-soft: #1d1b1c;
+  --red: #9d1117;
+  --red-bright: #d42a2f;
+  --gold: #d8c49d;
+  --cream: #f2eee5;
+  --muted: #9c9791;
+  --green: #a8c49b;
+  --danger: #e18a8a;
+  --background: #050505;
+  --foreground: #f2eee5;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--cream);
+  background: var(--black);
 }
+
+* { box-sizing: border-box; }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   min-height: 100vh;
+  margin: 0;
+  min-width: 320px;
 }
 
-/* Custom scrollbars for clean dashboards */
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+/* Custom scrollbars for dark theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #0a0a0b;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #272526;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #3a3735;
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
 }
